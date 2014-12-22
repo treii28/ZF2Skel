@@ -1,0 +1,36 @@
+<?php
+
+$title = 'Add new User';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<form method="post">
+  <table>
+    <tbody>
+    <tr>
+      <th>email: </th>
+      <td><input type="text" name="email" value="<?php echo $user->getEmail(); ?>"></td>
+    </tr>
+    <tr>
+      <th>First:</th>
+      <td><input type="text" name="firstName" value="<?php echo $user->getFirstName(); ?>"></td>
+    </tr>
+    <tr>
+      <th>Middle:</th>
+      <td><input type="text" name="middleName" value="<?php echo $user->getMiddleName(); ?>"></td>
+    </tr>
+    <tr>
+      <th>Last:</th>
+      <td><input type="text" name="lastName" value="<?php echo $user->getLastName(); ?>"></td>
+    </tr>
+    <tr>
+      <th>Phone:</th>
+      <td><input type="text" name="phone" value="<?php echo $user->getPhone(); ?>"></td>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Submit"></td>
+    </tr>
+    </tbody>
+  </table>
+</form>

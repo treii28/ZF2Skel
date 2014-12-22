@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\OrderItems" table="OrderItems">
+    <indexes>
+      <index name="orderOrderItemIdx" columns="order_id"/>
+    </indexes>
+    <id name="orderItemId" type="integer" column="order_item_id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="productId" type="integer" column="product_id" nullable="false">
+      <options>
+        <option name="unsigned">true</option>
+      </options>
+    </field>
+    <field name="orderItemName" type="string" column="order_item_name" length="64" nullable="false"/>
+    <field name="itemQuantity" type="integer" column="quantity" nullable="false">
+      <options>
+        <option name="unsigned">true</option>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="itemPrice" type="decimal" column="item_price" precision="2" nullable="false"/>
+    <field name="itemTotalPrice" type="decimal" column="item_total_price" precision="2" nullable="false"/>
+    <field name="cDate" type="datetime" column="cdate" nullable="true" />
+    <field name="mDate" type="datetime" column="mdate" nullable="true" />
+    <one-to-one field="product_id" target-entity="Application\Entity\Products">
+      <join-column name="product_id" referenced-column-name="product_id" on-delete="RESTRICT" on-update="RESTRICT"/>
+  </one-to-one>
+    <many-to-one field="order" target-entity="Application\Entity\Orders">
+      <join-columns>
+        <join-column name="order_id" referenced-column-name="order_id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>
