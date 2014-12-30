@@ -26,6 +26,8 @@ class ListXref
      */
     private $memberId;
 
+    private $member;
+
     /**
      * @var integer
      *
@@ -67,6 +69,14 @@ class ListXref
     public function getListId()
     {
         return $this->listId;
+    }
+
+    public function setMember($member) {
+        $this->member = $member;
+    }
+
+    public function getMember() {
+        return $this->member;
     }
 
     /**

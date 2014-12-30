@@ -67,6 +67,21 @@ return array(
                 ),
             ),
 
+            'list' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/list[/][:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\List',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+
             'order' => array(
                 'type'    => 'segment',
                 'options' => array(
@@ -151,7 +166,8 @@ return array(
             'translator' => 'MvcTranslator',
         ),
         'invokables' => array(
-            'UserMapper' => 'Application\Mapper\UserMapper'
+            'UserMapper' => 'Application\Mapper\UserMapper',
+            'ListMapper' => 'Application\Mapper\ListMapper'
         )
     ),
     'translator' => array(
@@ -167,7 +183,8 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
-            'Application\Controller\User' => 'Application\Controller\UserController'
+            'Application\Controller\User'  => 'Application\Controller\UserController',
+            'Application\Controller\List'  => 'Application\Controller\ListController'
         ),
     ),
     'view_manager' => array(
