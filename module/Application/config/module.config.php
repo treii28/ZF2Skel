@@ -7,8 +7,9 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-$foo = __DIR__;
-$bar = realpath(__DIR__.'/..');
+// check for an environmental variable to use alternate doctrine driver (generate entities uses xml_config)
+$doctrine_driver = ((isset($_SERVER['DOCTRINE_DRIVER'])) ? $_SERVER['DOCTRINE_DRIVER'] : 'application_entities');
+
 return array(
     'doctrine' => array(
         'driver' => array(
@@ -30,8 +31,9 @@ return array(
 
             'orm_default' => array(
                 'drivers' => array(
+                    'Application\Entity' => $doctrine_driver
                     //'Application\Entity' => 'xml_config'
-                    'Application\Entity' => 'application_entities'
+                    //'Application\Entity' => 'application_entities'
                 )
             )
         )
