@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Types" table="Types">
+    <id name="typeId" type="integer" column="typeId">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="typeName" type="string" column="typeName" length="64" nullable="false"/>
+    <field name="tableName" type="string" column="tableName" length="64" nullable="true"/>
+    <field name="entityName" type="string" column="entityName" length="64" nullable="true"/>
+  </entity>
+</doctrine-mapping>

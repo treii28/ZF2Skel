@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Lists" table="Lists">
+    <id name="listId" type="integer" column="listId">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="typeId" type="integer" column="typeId" nullable="false">
+      <options>
+        <option name="unsigned">true</option>
+      </options>
+    </field>
+    <field name="listName" type="string" column="listName" length="64" nullable="false"/>
+    <many-to-one field="type" target-entity="Types">
+      <join-column name="typeId" referenced-column-name="typeId" />
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\ListXref" table="ListXref">
+    <id name="listXrefId" type="integer" column="listXrefId">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="listId" type="integer" column="listId" nullable="false">
+      <options>
+        <option name="unsigned">true</option>
+      </options>
+    </field>
+    <field name="memberId" type="integer" column="memberId" nullable="false">
+      <options>
+        <option name="unsigned">true</option>
+      </options>
+    </field>
+    <many-to-one field="list" target-entity="Application\Entity\Lists">
+      <join-columns>
+        <join-column name="listId" referenced-column-name="listId"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>
