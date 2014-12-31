@@ -15,110 +15,80 @@ class Types
     /**
      * @var string
      *
-     * @ORM\Column(name="typeName", type="string", length=64, nullable=false)
+     * @ORM\Column(name="TypeName", type="string", length=64, nullable=false)
      */
-    private $typeName;
+    private $TypeName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tableName", type="string", length=64, nullable=true)
+     * @ORM\Column(name="EntityName", type="string", length=64, nullable=true)
      */
-    private $tableName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="entityName", type="string", length=64, nullable=true)
-     */
-    private $entityName;
+    private $EntityName;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="typeId", type="integer")
+     * @ORM\Column(name="TypeId", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $typeId;
+    private $TypeId;
 
 
     /**
-     * Set typeName
+     * Set TypeName
      *
      * @param string $typeName
      * @return Types
      */
     public function setTypeName($typeName)
     {
-        $this->typeName = $typeName;
+        $this->TypeName = $typeName;
 
         return $this;
     }
 
     /**
-     * Get typeName
+     * Get TypeName
      *
      * @return string 
      */
     public function getTypeName()
     {
-        return $this->typeName;
+        return $this->TypeName;
     }
 
     /**
-     * Set tableName
-     *
-     * @param string $tableName
-     * @return Types
-     */
-    public function setTableName($tableName)
-    {
-        $this->tableName = $tableName;
-
-        return $this;
-    }
-
-    /**
-     * Get tableName
-     *
-     * @return string 
-     */
-    public function getTableName()
-    {
-        return $this->tableName;
-    }
-
-    /**
-     * Set entityName
+     * Set EntityName
      *
      * @param string $entityName
      * @return Types
      */
     public function setEntityName($entityName)
     {
-        $this->entityName = $entityName;
+        $this->EntityName = $entityName;
 
         return $this;
     }
 
     /**
-     * Get entityName
+     * Get EntityName
      *
      * @return string 
      */
     public function getEntityName()
     {
-        return $this->entityName;
+        return $this->EntityName;
     }
 
     /**
-     * Get typeId
+     * Get TypeId
      *
      * @return integer 
      */
     public function getTypeId()
     {
-        return $this->typeId;
+        return $this->TypeId;
     }
 }

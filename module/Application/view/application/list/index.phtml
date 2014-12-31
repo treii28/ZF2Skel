@@ -1,5 +1,7 @@
 <div class="row">
-    <pre>
-<?= var_export($this->lists,1); ?>
-    </pre>
+    <div id="listNames">
+    <?php foreach($this->lists as $list) { ?>
+        <div>Id: <?= $list->getListId(); ?> Type: <?= $list->getType()->getTypeName(); ?> Name: <?= $list->getListName(); ?></div>
+    <?php } ?>
+    </div>
 </div>

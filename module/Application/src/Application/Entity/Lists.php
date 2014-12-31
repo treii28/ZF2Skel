@@ -15,91 +15,91 @@ class Lists
     /**
      * @var integer
      *
-     * @ORM\Column(name="typeId", type="integer", nullable=false)
+     * @ORM\Column(name="TypeId", type="integer", nullable=false)
      */
-    private $typeId;
+    private $TypeId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="listName", type="string", length=64, nullable=false)
+     * @ORM\Column(name="ListName", type="string", length=64, nullable=false)
      */
-    private $listName;
+    private $ListName;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="listId", type="integer")
+     * @ORM\Column(name="ListId", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $listId;
+    private $ListId;
 
     /**
      * @var \Application\Entity\Types
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Types")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="typeId", referencedColumnName="typeId")
+     *   @ORM\JoinColumn(name="TypeId", referencedColumnName="TypeId")
      * })
      */
     private $type;
 
 
     /**
-     * Set typeId
+     * Set TypeId
      *
      * @param integer $typeId
      * @return Lists
      */
     public function setTypeId($typeId)
     {
-        $this->typeId = $typeId;
+        $this->TypeId = $typeId;
 
         return $this;
     }
 
     /**
-     * Get typeId
+     * Get TypeId
      *
      * @return integer 
      */
     public function getTypeId()
     {
-        return $this->typeId;
+        return $this->TypeId;
     }
 
     /**
-     * Set listName
+     * Set ListName
      *
      * @param string $listName
      * @return Lists
      */
     public function setListName($listName)
     {
-        $this->listName = $listName;
+        $this->ListName = $listName;
 
         return $this;
     }
 
     /**
-     * Get listName
+     * Get ListName
      *
      * @return string 
      */
     public function getListName()
     {
-        return $this->listName;
+        return $this->ListName;
     }
 
     /**
-     * Get listId
+     * Get ListId
      *
      * @return integer 
      */
     public function getListId()
     {
-        return $this->listId;
+        return $this->ListId;
     }
 
     /**

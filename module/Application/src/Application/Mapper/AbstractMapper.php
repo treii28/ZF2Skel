@@ -10,6 +10,8 @@ namespace Application\Mapper;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
 
 class AbstractMapper implements ServiceLocatorAwareInterface
 {
@@ -20,6 +22,11 @@ class AbstractMapper implements ServiceLocatorAwareInterface
      * @var \Doctrine\ORM\EntityManager; $em
      */
     private $entity_manager;
+
+    /**
+     * @var \Doctrine\ORM\EntityRespository $repository
+     */
+    private $repository;
 
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
@@ -41,7 +48,7 @@ class AbstractMapper implements ServiceLocatorAwareInterface
      */
     public function getEntityManager()
     {
-        if (!($this->entity_manager instanceof \Doctrine\ORM\EntityManager)) {
+        if (!($this->entity_manager instanceof EntityManager)) {
             $this->entity_manager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
         }
 
@@ -73,12 +80,24 @@ class AbstractMapper implements ServiceLocatorAwareInterface
      * @return string
      */
     protected function _getEntityName() {
-        if(class_exists('Application\\Entity\\'.$this->_getBaseName().'s')) {
+        $cclass = get_called_class();
+        $centity = (defined($cclass::ENTITY_NAME)) ? $cclass::ENTITY_NAME : '';
+        if(!empty($centity) && class_exists($centity)) {
+            return $centity;
+        } elseif(class_exists('Application\\Entity\\'.$this->_getBaseName().'s')) {
             return 'Application\\Entity\\'.$this->_getBaseName().'s';
         } elseif(class_exists('Application\\Entity\\'.$this->_getBaseName().'es')) {
-            return 'Application\\Entity\\'.$this->_getBaseName().'es';
+            return 'Application\\Entity\\' . $this->_getBaseName() . 'es';
         } else {
             return self::ENTITY_NAME;
         }
+    }
+
+    public function getRepo() {
+        if(!($this->repository instanceof EntityRepository)) {
+            $this->repository = $this->getEntityManager()->getRepository($this->_getEntityName());
+        }
+        return $this->repository;
+
     }
 }

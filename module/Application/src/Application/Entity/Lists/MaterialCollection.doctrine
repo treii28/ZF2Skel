@@ -1,0 +1,152 @@
+<?php
+
+namespace Application\Entity\Lists;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * MaterialCollection
+ *
+ * @ORM\Table(name="ListXref", uniqueConstraints={@ORM\UniqueConstraint(name="ListMember_idx", columns={"ListId", "MemberId"})})
+ * @ORM\Entity
+ */
+class MaterialCollection
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="MemberId", type="integer", nullable=false)
+     */
+    private $MaterialId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="listXrefId", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $listXrefId;
+
+    /**
+     * @var \Application\Entity\Lists
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Lists")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ListId", referencedColumnName="ListId")
+     * })
+     */
+    private $list;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Application\Entity\Materials", cascade={"all"})
+     * @ORM\JoinTable(name="Materials",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="ListId", referencedColumnName="ListId", nullable=false)
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="MemberId", referencedColumnName="MaterialId", columnDefinition="INT NULL")
+     *   }
+     * )
+     */
+    private $materials;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->materials = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set MaterialId
+     *
+     * @param integer $materialId
+     * @return MaterialCollection
+     */
+    public function setMaterialId($materialId)
+    {
+        $this->MaterialId = $materialId;
+
+        return $this;
+    }
+
+    /**
+     * Get MaterialId
+     *
+     * @return integer 
+     */
+    public function getMaterialId()
+    {
+        return $this->MaterialId;
+    }
+
+    /**
+     * Get listXrefId
+     *
+     * @return integer 
+     */
+    public function getListXrefId()
+    {
+        return $this->listXrefId;
+    }
+
+    /**
+     * Set list
+     *
+     * @param \Application\Entity\Lists $list
+     * @return MaterialCollection
+     */
+    public function setList(\Application\Entity\Lists $list = null)
+    {
+        $this->list = $list;
+
+        return $this;
+    }
+
+    /**
+     * Get list
+     *
+     * @return \Application\Entity\Lists 
+     */
+    public function getList()
+    {
+        return $this->list;
+    }
+
+    /**
+     * Add materials
+     *
+     * @param \Application\Entity\Materials $materials
+     * @return MaterialCollection
+     */
+    public function addMaterial(\Application\Entity\Materials $materials)
+    {
+        $this->materials[] = $materials;
+
+        return $this;
+    }
+
+    /**
+     * Remove materials
+     *
+     * @param \Application\Entity\Materials $materials
+     */
+    public function removeMaterial(\Application\Entity\Materials $materials)
+    {
+        $this->materials->removeElement($materials);
+    }
+
+    /**
+     * Get materials
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMaterials()
+    {
+        return $this->materials;
+    }
+}

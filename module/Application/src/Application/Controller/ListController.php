@@ -18,7 +18,7 @@ class ListController extends AbstractController
 
     public function indexAction()
     {
-        $lists = $this->getMapper()->findAll();
+        $lists = $this->getMapper()->getListsByType('MaterialCollection');
 
         return new ViewModel(array('lists' => $lists));
     }
@@ -32,13 +32,22 @@ class ListController extends AbstractController
     }
 
     /**
-     * @return ListMapper
+     * @param null|string $mapperName
+     * @return ListMapper|\Application\Mapper\AbstractMapper
+     * @throws \Exception on mapper class not found
      */
-    protected function getMapper() {
-        if(!$this->_Mapper) {
-            $this->_Mapper = $this->getServiceLocator()->get('ListMapper');
+    protected function getMapper($mapperName=null) {
+        if(empty($mapperName)) {
+            if(!$this->_Mapper) {
+                $this->_Mapper = $this->getServiceLocator()->get('ListMapper');
+            }
+            return $this->_Mapper;
+        } elseif(class_exists('Application\\Mapper\\'.$mapperName)) {
+            return $this->getServiceLocator()->get($mapperName);
+        } else {
+            throw new \Exception(__METHOD__." mapper not found for '$mapperName'");
         }
-        return $this->_Mapper;
+
     }
 
     protected function getListByName($name=null)

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ListXref
  *
- * @ORM\Table(name="ListXref")
+ * @ORM\Table(name="ListXref", uniqueConstraints={@ORM\UniqueConstraint(name="ListMember_idx", columns={"ListId", "MemberId"})})
  * @ORM\Entity
  */
 class ListXref
@@ -15,18 +15,16 @@ class ListXref
     /**
      * @var integer
      *
-     * @ORM\Column(name="listId", type="integer", nullable=false)
+     * @ORM\Column(name="ListId", type="integer", nullable=false)
      */
-    private $listId;
+    private $ListId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="memberId", type="integer", nullable=false)
+     * @ORM\Column(name="MemberId", type="integer", nullable=false)
      */
-    private $memberId;
-
-    private $member;
+    private $MemberId;
 
     /**
      * @var integer
@@ -42,64 +40,56 @@ class ListXref
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Lists")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="listId", referencedColumnName="listId")
+     *   @ORM\JoinColumn(name="ListId", referencedColumnName="ListId")
      * })
      */
     private $list;
 
 
     /**
-     * Set listId
+     * Set ListId
      *
      * @param integer $listId
      * @return ListXref
      */
     public function setListId($listId)
     {
-        $this->listId = $listId;
+        $this->ListId = $listId;
 
         return $this;
     }
 
     /**
-     * Get listId
+     * Get ListId
      *
      * @return integer 
      */
     public function getListId()
     {
-        return $this->listId;
-    }
-
-    public function setMember($member) {
-        $this->member = $member;
-    }
-
-    public function getMember() {
-        return $this->member;
+        return $this->ListId;
     }
 
     /**
-     * Set memberId
+     * Set MemberId
      *
      * @param integer $memberId
      * @return ListXref
      */
     public function setMemberId($memberId)
     {
-        $this->memberId = $memberId;
+        $this->MemberId = $memberId;
 
         return $this;
     }
 
     /**
-     * Get memberId
+     * Get MemberId
      *
      * @return integer 
      */
     public function getMemberId()
     {
-        return $this->memberId;
+        return $this->MemberId;
     }
 
     /**

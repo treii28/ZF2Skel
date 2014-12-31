@@ -23,7 +23,7 @@ class UserMapper extends AbstractMapper {
      * @return \Application\Entity\Addresses
      */
     public function getNewAddress($user) {
-        if($user instanceof \Application\Entity\Users) {
+        if($user instanceof Users) {
             $userObj = $user;
         } else {
             $userId = intval($user);
@@ -32,7 +32,7 @@ class UserMapper extends AbstractMapper {
                 throw new \Exception(__METHOD__." user not found for id '$userId'");
             }
         }
-        $newAddress = new \Application\Entity\Addresses();
+        $newAddress = new Addresses();
         $newAddress->setUserId($userObj);
         $newAddress->setFirstName($userObj->getFirstName());
         $newAddress->setMiddleName($userObj->getMiddleName());

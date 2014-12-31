@@ -15,9 +15,9 @@ class Materials
     /**
      * @var string
      *
-     * @ORM\Column(name="materialName", type="string", length=64, nullable=false)
+     * @ORM\Column(name="MaterialName", type="string", length=64, nullable=false)
      */
-    private $materialName;
+    private $MaterialName;
 
     /**
      * @var integer
@@ -26,39 +26,39 @@ class Materials
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $materialId;
+    private $MaterialId;
 
 
     /**
-     * Set materialName
+     * Set MaterialName
      *
      * @param string $materialName
      * @return Materials
      */
     public function setMaterialName($materialName)
     {
-        $this->materialName = $materialName;
+        $this->MaterialName = $materialName;
 
         return $this;
     }
 
     /**
-     * Get materialName
+     * Get MaterialName
      *
      * @return string 
      */
     public function getMaterialName()
     {
-        return $this->materialName;
+        return $this->MaterialName;
     }
 
     /**
-     * Get materialId
+     * Get MaterialId
      *
      * @return integer 
      */
     public function getMaterialId()
     {
-        return $this->materialId;
+        return $this->MaterialId;
     }
 }

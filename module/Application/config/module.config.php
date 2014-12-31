@@ -166,8 +166,14 @@ return array(
             'translator' => 'MvcTranslator',
         ),
         'invokables' => array(
-            'UserMapper' => 'Application\Mapper\UserMapper',
-            'ListMapper' => 'Application\Mapper\ListMapper'
+            'AddressMapper'   => 'Application\Mapper\AddressMapper',
+            'ListMapper'      => 'Application\Mapper\ListMapper',
+            'ListXrefMapper'  => 'Application\Mapper\ListXrefMapper',
+            'OrderItemMapper' => 'Application\Mapper\OrderItemMapper',
+            'OrderMapper'     => 'Application\Mapper\OrderMapper',
+            'ProductMapper'   => 'Application\Mapper\ProductMapper',
+            'TypeMapper'      => 'Application\Mapper\TypeMapper',
+            'UserMapper'      => 'Application\Mapper\UserMapper'
         )
     ),
     'translator' => array(
