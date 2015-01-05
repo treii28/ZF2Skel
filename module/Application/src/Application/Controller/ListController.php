@@ -4,6 +4,8 @@ namespace Application\Controller;
 
 use Zend\View\Model\ViewModel;
 use Application\Mapper\ListMapper;
+use Application\Mapper\TypeMapper;
+use Application\Mapper\ListXrefMapper;
 
 class ListController extends AbstractController
 {
@@ -15,20 +17,42 @@ class ListController extends AbstractController
      * @var ListMapper $_Mapper
      */
     protected $_Mapper;
+    /**
+     * @var TypeMapper $_TypeMapper
+     */
+    protected $_TypeMapper;
+    /**
+     * @var ListXrefMapper $_XrefMapper
+     */
+    protected $_XrefMapper;
 
     public function indexAction()
     {
-        $lists = $this->getMapper()->getListsByType('MaterialCollection');
 
-        return new ViewModel(array('lists' => $lists));
+        return new ViewModel();
     }
 
-    public function showAction() {
-        $listName = $this->params()->fromRoute('listName', 'Acryllic Materials');
-        $listRef = $this->getListByName($listName);
-        $member = $this->getListMember($listRef);
+    public function typesAction() {
+        $types = $this->getTypeMapper()->findAll();
+        return new ViewModel(array('types' => $types));
+    }
 
-        return new ViewModel(array('list' => $listRef, 'member' => $member));
+    public function showtypeAction() {
+        $typeId = $this->params()->fromRoute('id', '');
+        $type = $this->getTypeMapper()->findRecordById($typeId);
+
+        $lists = $this->getMapper()->getListsByType($type->getTypeName());
+        return new ViewModel(array('type' => $type, 'lists' => $lists));
+    }
+
+    public function showlistAction() {
+        $listName = $this->params()->fromRoute('id', '');
+        $listXRefMapper = $this->getXrefMapper($listName);
+        $listRef = $listXRefMapper->findRecordById($listName);
+        $listXRefMapper->populateListMembers($listRef);
+        $members = $listRef->getMembers();
+
+        return new ViewModel(array('listRef' => $listRef, 'members' => $members));
     }
 
     /**
@@ -47,19 +71,45 @@ class ListController extends AbstractController
         } else {
             throw new \Exception(__METHOD__." mapper not found for '$mapperName'");
         }
-
     }
 
-    protected function getListByName($name=null)
-    {
-        $list = $this->getMapper()->findRecordByName($name);
-
-        return $list;
+    /**
+     * @return TypeMapper
+     */
+    protected function getTypeMapper() {
+        if(!$this->_TypeMapper) {
+            $this->_TypeMapper = $this->getServiceLocator()->get('TypeMapper');
+        }
+        return $this->_TypeMapper;
+    }
+    /**
+     * @param integer|string $id
+     * @return ListXrefMapper
+     * @throws \Exception on Xref mapper not find
+     */
+    protected function getXrefMapper($id) {
+        if(!$this->_XrefMapper) {
+            $typeMapper = $this->getMapper()->getListTypeName($id) . 'Mapper';
+            if(class_exists('\\Application\\Mapper\\Lists\\' . $typeMapper)) {
+                $this->_XrefMapper = $this->getServiceLocator()->get($typeMapper);
+            } else {
+                throw new \Exception(__METHOD__." type Xref mapper not found");
+            }
+        }
+        return $this->_XrefMapper;
     }
 
-    protected function getListMember($listRef) {
-        $member = $this->getMapper()->getXrefMember($listRef);
+    /**
+     * @param integer|string $id
+     * @return \Doctrine\Common\Collections\Collection
+     * @throws \Exception
+     */
+    protected function getListMembers($id) {
+        $listRef = $this->getListById($id);
+        $listXRefMapper = $this->getXrefMapper($id);
+        $listXRefMapper->populateListMembers($listRef);
+        $members = $listRef->getMembers();
 
-        return $member;
+        return $members;
     }
 }

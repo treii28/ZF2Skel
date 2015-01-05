@@ -1,0 +1,7 @@
+<div class="row">
+    <div id="listNames">
+    <?php foreach($this->types as $type) { ?>
+        <div><a href="/list/showtype/<?= $type->getTypeId(); ?>"><?= $type->getTypeName(); ?></a></div>
+    <?php } ?>
+    </div>
+</div>

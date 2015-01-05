@@ -16,7 +16,7 @@ return array(
             'application_entities' => array(
                 'class' =>'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
-                'paths' => array(__DIR__ . '/../src/Application/Entity')
+                'paths' => array(realpath(__DIR__ . '/../src/Application/Entity'), realpath(__DIR__ . '/../src/Application/Entity/Lists'))
             ),
             'xml_config' => array(
                 'class' =>'Doctrine\ORM\Mapping\Driver\XmlDriver',
@@ -173,7 +173,9 @@ return array(
             'OrderMapper'     => 'Application\Mapper\OrderMapper',
             'ProductMapper'   => 'Application\Mapper\ProductMapper',
             'TypeMapper'      => 'Application\Mapper\TypeMapper',
-            'UserMapper'      => 'Application\Mapper\UserMapper'
+            'UserMapper'      => 'Application\Mapper\UserMapper',
+
+            'MaterialCollectionMapper'      => 'Application\Mapper\Lists\MaterialCollectionMapper',
         )
     ),
     'translator' => array(

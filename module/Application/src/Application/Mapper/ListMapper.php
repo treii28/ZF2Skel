@@ -28,12 +28,20 @@ class ListMapper extends AbstractMapper {
     }
 
     /**
+     * @param integer $id
+     * @return null|Lists
+     */
+    public function getListById($id) {
+        return $this->getRepo()->find($id);
+    }
+
+    /**
      * @param integer|string $id
      * @return array
      * @throws \Exception
      */
     public function getListsByType($id) {
-        $type = (intval($id > 0)) ? $this->getTypeMapper()->findRecordById($id) : $this->getTypeMapper()->findRecordByName($id);
+        $type = (intval($id) > 0) ? $this->getTypeMapper()->findRecordById($id) : $this->getTypeMapper()->findRecordByName($id);
         if(!($type instanceof \Application\Entity\Types)) {
             throw new \Exception(__METHOD__ . " Type record not found for '$id'");
         }
@@ -46,7 +54,7 @@ class ListMapper extends AbstractMapper {
      * @throws \Exception on list not found
      */
     public function getListTypeName($id) {
-        $list = (intval($id > 0)) ? $this->findRecordById($id) : $this->findRecordByName($id);
+        $list = (intval($id > 0)) ? $this->getListById($id) : $this->getListByName($id);
         if(!($list instanceof Lists)) {
             throw new \Exception(__METHOD__ . " Lists record not found for '$id'");
         }

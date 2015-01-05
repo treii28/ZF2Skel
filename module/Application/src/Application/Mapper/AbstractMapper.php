@@ -28,6 +28,8 @@ class AbstractMapper implements ServiceLocatorAwareInterface
      */
     private $repository;
 
+    public function __construct() { }
+
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
         $this->service_manager = $serviceLocator;
@@ -80,8 +82,9 @@ class AbstractMapper implements ServiceLocatorAwareInterface
      * @return string
      */
     protected function _getEntityName() {
-        $cclass = get_called_class();
+        $cclass = '\\'.get_called_class();
         $centity = (defined($cclass::ENTITY_NAME)) ? $cclass::ENTITY_NAME : '';
+        $foo = \Application\Mapper\Lists\MaterialCollectionMapper::ENTITY_NAME;
         if(!empty($centity) && class_exists($centity)) {
             return $centity;
         } elseif(class_exists('Application\\Entity\\'.$this->_getBaseName().'s')) {
@@ -98,6 +101,5 @@ class AbstractMapper implements ServiceLocatorAwareInterface
             $this->repository = $this->getEntityManager()->getRepository($this->_getEntityName());
         }
         return $this->repository;
-
     }
 }

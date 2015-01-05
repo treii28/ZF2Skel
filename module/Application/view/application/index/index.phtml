@@ -1,3 +1,10 @@
 <div class="row">
-    <a href="<?php echo $this->url('user', array('action'=>'index'));?>">User List</a>
+    <ul>
+        <li>
+            <a href="<?php echo $this->url('user', array('action'=>'index'));?>">Users</a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url('list', array('action'=>'index'));?>">Lists</a>
+        </li>
+    </ul>
 </div>

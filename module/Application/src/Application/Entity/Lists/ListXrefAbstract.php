@@ -10,7 +10,7 @@ namespace Application\Entity\Lists;
 
 use Application\Entity\ListXref;
 
-abstract class XrefAbstract extends ListXref {
+abstract class ListXrefAbstract extends ListXref {
     /**
      * @var \Doctrine\Common\Collections\Collection $members
      */
@@ -47,7 +47,7 @@ abstract class XrefAbstract extends ListXref {
      *
      * @param object $member
      */
-    public function removeMaterial($member)
+    public function removeMember($member)
     {
         $this->members->removeElement($member);
     }

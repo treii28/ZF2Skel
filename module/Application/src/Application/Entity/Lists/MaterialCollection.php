@@ -6,9 +6,9 @@ namespace Application\Entity\Lists;
 use Application\Entity\Materials;
 
 /**
- * MaterialCollection
+ * MaterialCollections
  */
-class MaterialCollection extends XrefAbstract
+class MaterialCollection extends ListXrefAbstract
 {
     /*
      * materials (members) relationship
@@ -38,7 +38,7 @@ class MaterialCollection extends XrefAbstract
      * Set MaterialId
      *
      * @param integer $materialId
-     * @return MaterialCollection
+     * @return MaterialCollections
      */
     public function setMaterialId($materialId)
     {
@@ -65,7 +65,7 @@ class MaterialCollection extends XrefAbstract
      * Add materials
      *
      * @param \Application\Entity\Materials $materials
-     * @return MaterialCollection
+     * @return MaterialCollections
      */
     public function addMaterial(Materials $materials)
     {

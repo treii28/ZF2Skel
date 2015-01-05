@@ -28,15 +28,23 @@ class ListXrefMapper extends AbstractMapper {
         parent::__construct();
     }
 
+    protected function _getEntityName() {
+        /*
+        $cclass = get_called_class();
+        $typeName = $cclass::TYPE_NAME;
+        $entityName = (class_exists('Application\\Entity\\Lists\\'.$typeName)) ? 'Application\\Entity\\Lists\\'.$typeName : 'Application\\Entity\\ListXref';
+        return $entityName;
+        */
+        return 'Application\\Entity\\ListXref';
+    }
+
     /**
      * @param \Application\Entity\Lists\XrefAbstract $listRef
      */
     public function populateListMembers(&$listRef) {
-        $list = $listRef->getList();
-        $type = $list->getType();
         $listRef->initMembers(); // clear the member array
-        foreach($this->getRepo()->findBy(array('listId' => $list->getListId())) as $member) {
-            $refEntity = 'Application\\Entity\\' . $type->getEntityName();
+        foreach($this->getRepo()->findBy(array('ListId' => $listRef->getList()->getListId())) as $member) {
+            $refEntity = 'Application\\Entity\\' . $listRef->getList()->getType()->getEntityName();
             $refRepo = $this->getEntityManager()->getRepository($refEntity);
             $memObj = $refRepo->find($member->getMemberId());
             if($memObj instanceof $refEntity) {
@@ -45,10 +53,26 @@ class ListXrefMapper extends AbstractMapper {
         }
     }
 
+    /**
+     * @param \Application\Entity\Lists\XrefAbstract $listRef
+     * @return string
+     */
+    public function getListRefEntityName($listRef) {
+        $refEntity = 'Application\\Entity\\' . $listRef->getList()->getType()->getEntityName();
+        return $refEntity;
+    }
+
+    /**
+     * @param \Application\Entity\Lists\XrefAbstract $listRef
+     * @return \Doctrine\ORM\EntityRepository
+     */
+    public function getListRefRepo($listRef) {
+        $refRepo = $this->getEntityManager()->getRepository($this->getListRefEntityName($listRef));
+        return $refRepo;
+    }
+
     public function findRecordByListName($name) {
         $list = $this->getListMapper()->getListByName($name);
-        $entity = $this->getListMapper()->getTypeMapper()->getTypeEntityName($list->getTypeId());
-        $type = $list->getType();
         $listXref = $this->getEntityManager()->find(self::ENTITY_NAME,$list->getListId());
         return $listXref;
     }

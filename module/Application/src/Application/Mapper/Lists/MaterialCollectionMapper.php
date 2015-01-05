@@ -13,9 +13,4 @@ use Application\Mapper\ListXrefMapper;
 class MaterialCollectionMapper extends ListXrefMapper
 {
     const TYPE_NAME =  "MaterialCollection";
-
-    public function listAll()
-    {
-    }
-
 }
