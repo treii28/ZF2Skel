@@ -17,14 +17,6 @@ class ListController extends AbstractController
      * @var ListMapper $_Mapper
      */
     protected $_Mapper;
-    /**
-     * @var TypeMapper $_TypeMapper
-     */
-    protected $_TypeMapper;
-    /**
-     * @var ListXrefMapper $_XrefMapper
-     */
-    protected $_XrefMapper;
 
     public function indexAction()
     {
@@ -77,10 +69,7 @@ class ListController extends AbstractController
      * @return TypeMapper
      */
     protected function getTypeMapper() {
-        if(!$this->_TypeMapper) {
-            $this->_TypeMapper = $this->getServiceLocator()->get('TypeMapper');
-        }
-        return $this->_TypeMapper;
+        return $this->getServiceLocator()->get('TypeMapper');
     }
     /**
      * @param integer|string $id
@@ -88,15 +77,12 @@ class ListController extends AbstractController
      * @throws \Exception on Xref mapper not find
      */
     protected function getXrefMapper($id) {
-        if(!$this->_XrefMapper) {
-            $typeMapper = $this->getMapper()->getListTypeName($id) . 'Mapper';
-            if(class_exists('\\Application\\Mapper\\Lists\\' . $typeMapper)) {
-                $this->_XrefMapper = $this->getServiceLocator()->get($typeMapper);
-            } else {
-                throw new \Exception(__METHOD__." type Xref mapper not found");
-            }
+        $typeMapper = $this->getMapper()->getListTypeName($id) . 'Mapper';
+        if(class_exists('\\Application\\Mapper\\Lists\\' . $typeMapper)) {
+            return $this->_XrefMapper = $this->getServiceLocator()->get($typeMapper);
+        } else {
+            throw new \Exception(__METHOD__." type Xref mapper not found");
         }
-        return $this->_XrefMapper;
     }
 
     /**

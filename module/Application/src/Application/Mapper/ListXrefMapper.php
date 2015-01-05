@@ -43,6 +43,10 @@ class ListXrefMapper extends AbstractMapper {
      */
     public function populateListMembers(&$listRef) {
         $listRef->initMembers(); // clear the member array
+        $list = $listRef->getList();
+        $listId = $list->getListId();
+        $type = $list->getType();
+        $entityName = $type->getEntityName();
         foreach($this->getRepo()->findBy(array('ListId' => $listRef->getList()->getListId())) as $member) {
             $refEntity = 'Application\\Entity\\' . $listRef->getList()->getType()->getEntityName();
             $refRepo = $this->getEntityManager()->getRepository($refEntity);
@@ -54,7 +58,7 @@ class ListXrefMapper extends AbstractMapper {
     }
 
     /**
-     * @param \Application\Entity\Lists\XrefAbstract $listRef
+     * @param \Application\Entity\ListXref $listRef
      * @return string
      */
     public function getListRefEntityName($listRef) {
@@ -63,7 +67,7 @@ class ListXrefMapper extends AbstractMapper {
     }
 
     /**
-     * @param \Application\Entity\Lists\XrefAbstract $listRef
+     * @param \Application\Entity\ListXref $listRef
      * @return \Doctrine\ORM\EntityRepository
      */
     public function getListRefRepo($listRef) {

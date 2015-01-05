@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Application\Entity\Printers" table="Printers">
+        <id name="PrinterId" type="integer" column="PrinterId">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="PrinterName" type="string" column="PrinterName" length="64" nullable="false"/>
+    </entity>
+</doctrine-mapping>

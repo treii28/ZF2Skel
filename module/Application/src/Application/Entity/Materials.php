@@ -61,4 +61,14 @@ class Materials
     {
         return $this->MaterialId;
     }
+
+    // alias functions
+
+    public function getId() {
+        return $this->getMaterialId();
+    }
+
+    public function getName() {
+        return $this->getMaterialName();
+    }
 }
