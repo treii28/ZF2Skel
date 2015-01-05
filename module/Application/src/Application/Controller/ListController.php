@@ -38,9 +38,10 @@ class ListController extends AbstractController
     }
 
     public function showlistAction() {
-        $listName = $this->params()->fromRoute('id', '');
-        $listXRefMapper = $this->getXrefMapper($listName);
-        $listRef = $listXRefMapper->findRecordById($listName);
+        $listId = $this->params()->fromRoute('id', '');
+        $list = $this->getMapper()->findRecordById($listId);
+        $listXRefMapper = $this->getXrefMapper($listId);
+        $listRef = $listXRefMapper->findRecordById($listId);
         $listXRefMapper->populateListMembers($listRef);
         $members = $listRef->getMembers();
 
@@ -79,7 +80,7 @@ class ListController extends AbstractController
     protected function getXrefMapper($id) {
         $typeMapper = $this->getMapper()->getListTypeName($id) . 'Mapper';
         if(class_exists('\\Application\\Mapper\\Lists\\' . $typeMapper)) {
-            return $this->_XrefMapper = $this->getServiceLocator()->get($typeMapper);
+            return $this->getServiceLocator()->get($typeMapper);
         } else {
             throw new \Exception(__METHOD__." type Xref mapper not found");
         }
