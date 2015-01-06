@@ -39,13 +39,10 @@ class ListController extends AbstractController
 
     public function showlistAction() {
         $listId = $this->params()->fromRoute('id', '');
-        $list = $this->getMapper()->findRecordById($listId);
-        $listXRefMapper = $this->getXrefMapper($listId);
-        $listRef = $listXRefMapper->findRecordById($listId);
-        $listXRefMapper->populateListMembers($listRef);
-        $members = $listRef->getMembers();
+        $listRef = $this->getMapper()->findRecordById($listId);
+        $this->getMapper()->populateListMembers($listRef);
 
-        return new ViewModel(array('listRef' => $listRef, 'members' => $members));
+        return new ViewModel(array('listRef' => $listRef, 'members' => $listRef->getMembers()));
     }
 
     /**
@@ -91,12 +88,11 @@ class ListController extends AbstractController
      * @return \Doctrine\Common\Collections\Collection
      * @throws \Exception
      */
-    protected function getListMembers($id) {
-        $listRef = $this->getListById($id);
-        $listXRefMapper = $this->getXrefMapper($id);
-        $listXRefMapper->populateListMembers($listRef);
+    protected function getListMembers($listId) {
+        $listRef = $this->getMapper()->findRecordById($listId);
+        $this->getMapper()->populateListMembers($listRef);
         $members = $listRef->getMembers();
 
-        return $members;
+        return $listRef->getMembers();
     }
 }

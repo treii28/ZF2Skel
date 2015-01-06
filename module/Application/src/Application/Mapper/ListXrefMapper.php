@@ -38,24 +38,6 @@ class ListXrefMapper extends AbstractMapper {
         return 'Application\\Entity\\ListXref';
     }
 
-    /**
-     * @param \Application\Entity\Lists\XrefAbstract $listRef
-     */
-    public function populateListMembers(&$listRef) {
-        $listRef->initMembers(); // clear the member array
-        $list = $listRef->getList();
-        $listId = $list->getListId();
-        $type = $list->getType();
-        $entityName = $type->getEntityName();
-        foreach($this->getRepo()->findBy(array('ListId' => $listRef->getList()->getListId())) as $member) {
-            $refEntity = 'Application\\Entity\\' . $listRef->getList()->getType()->getEntityName();
-            $refRepo = $this->getEntityManager()->getRepository($refEntity);
-            $memObj = $refRepo->find($member->getMemberId());
-            if($memObj instanceof $refEntity) {
-                $listRef->addMember($memObj);
-            }
-        }
-    }
 
     /**
      * @param \Application\Entity\ListXref $listRef
@@ -75,10 +57,15 @@ class ListXrefMapper extends AbstractMapper {
         return $refRepo;
     }
 
-    public function findRecordByListName($name) {
-        $list = $this->getListMapper()->getListByName($name);
-        $listXref = $this->getEntityManager()->find(self::ENTITY_NAME,$list->getListId());
-        return $listXref;
+    public function findRecordsByListName($listName) {
+        $list = $this->getListMapper()->getListByName($listName);
+        $listXrefs = $this->getRepo()->findBy(array('ListId' => $list->getListId()));
+        return $listXrefs;
+    }
+
+    public function findRecordsByListId($listId) {
+        $listXrefs = $this->getRepo()->findBy(array('ListId' => $listId));
+        return $listXrefs;
     }
 
     /**

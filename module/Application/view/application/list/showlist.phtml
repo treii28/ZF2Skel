@@ -1,11 +1,10 @@
 <div class="row">
     <strong>List</strong>
-  <p>List Id: <?= $listRef->getList()->getListId(); ?></p>
-  <p>List Name: <?= $listRef->getList()->getListName(); ?></p>
-  <p>List Type Name: <?= $listRef->getList()->getType()->getTypeName(); ?></p>
-  <p>List Member Entity: <?= $listRef->getList()->getType()->getEntityName(); ?></p>
+  <p>List Id: <?= $listRef->getListId(); ?></p>
+  <p>List Name: <?= $listRef->getListName(); ?></p>
+  <p>List Type Name: <?= $listRef->getType()->getTypeName(); ?></p>
   <br />
-    <strong>Materials</strong>
+    <strong><?= $listRef->getType()->getEntityName(); ?></strong>
   <ul>
   <?php foreach($this->members as $member) { ?>
       <li><?= $member->getName(); ?></li>
