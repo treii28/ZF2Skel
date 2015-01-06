@@ -29,6 +29,13 @@ class Types
     /**
      * @var integer
      *
+     * @ORM\Column(name="ListId", type="integer", nullable=false)
+     */
+    private $ListId;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="TypeId", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -80,6 +87,29 @@ class Types
     public function getEntityName()
     {
         return $this->EntityName;
+    }
+
+    /**
+     * Set ListId
+     *
+     * @param integer $listId
+     * @return Types
+     */
+    public function setListId($listId)
+    {
+        $this->ListId = $listId;
+
+        return $this;
+    }
+
+    /**
+     * Get ListId
+     *
+     * @return integer 
+     */
+    public function getListId()
+    {
+        return $this->ListId;
     }
 
     /**

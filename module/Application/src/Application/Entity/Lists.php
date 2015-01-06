@@ -36,6 +36,16 @@ class Lists
     private $ListId;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="Application\Entity\ListXref", mappedBy="ListId", cascade={"all"})
+     * @ORM\OrderBy({
+     *     "MemberId"="ASC"
+     * })
+     */
+    private $Xref;
+
+    /**
      * @var \Application\Entity\Types
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Types")
@@ -45,6 +55,13 @@ class Lists
      */
     private $type;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->Xref = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set TypeId
@@ -103,6 +120,39 @@ class Lists
     }
 
     /**
+     * Add Xref
+     *
+     * @param \Application\Entity\ListXref $xref
+     * @return Lists
+     */
+    public function addXref(\Application\Entity\ListXref $xref)
+    {
+        $this->Xref[] = $xref;
+
+        return $this;
+    }
+
+    /**
+     * Remove Xref
+     *
+     * @param \Application\Entity\ListXref $xref
+     */
+    public function removeXref(\Application\Entity\ListXref $xref)
+    {
+        $this->Xref->removeElement($xref);
+    }
+
+    /**
+     * Get Xref
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getXref()
+    {
+        return $this->Xref;
+    }
+
+    /**
      * Set type
      *
      * @param \Application\Entity\Types $type
@@ -123,59 +173,5 @@ class Lists
     public function getType()
     {
         return $this->type;
-    }
-
-
-
-    // added properties and classes
-    /**
-     * @var \Doctrine\Common\Collections\Collection $members
-     */
-    private $members;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->initMembers();
-        parent::__construct();
-    }
-
-    public function initMembers() {
-        $this->members = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add member
-     *
-     * @param object $member
-     * @return \Application\Entity\ListXref
-     */
-    public function addMember($member)
-    {
-        $this->members[] = $member;
-
-        return $this;
-    }
-
-    /**
-     * Remove member
-     *
-     * @param object $member
-     */
-    public function removeMember($member)
-    {
-        $this->members->removeElement($member);
-    }
-
-    /**
-     * Get members
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMembers()
-    {
-        return $this->members;
     }
 }

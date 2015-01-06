@@ -9,6 +9,7 @@
 namespace Application\Mapper;
 
 use Application\Entity\Lists;
+use Zend\Mvc\Application;
 
 class ListMapper extends AbstractMapper {
 
@@ -98,22 +99,5 @@ class ListMapper extends AbstractMapper {
             $this->_xrefMapper = $this->getServiceLocator()->get('ListXrefMapper');
         }
         return $this->_xrefMapper;
-    }
-    /**
-     * @param \Application\Entity\Lists $listRef
-     */
-    public function populateListMembers(&$listRef) {
-        $listRef->initMembers(); // clear the member array
-        $listId = $listRef->getListId();
-        $refRepo = $this->getListXrefMapper()->getRepo();
-        $members = $refRepo->findBy(array('ListId' => $listId));
-        foreach($this->getListXrefMapper()->getRepo()->findBy(array('ListId' => $listRef->getListId())) as $member) {
-            $refEntity = 'Application\\Entity\\' . $listRef->getType()->getEntityName();
-            $refRepo = $this->getEntityManager()->getRepository($refEntity);
-            $memObj = $refRepo->find($member->getMemberId());
-            if($memObj instanceof $refEntity) {
-                $listRef->addMember($memObj);
-            }
-        }
     }
 }
