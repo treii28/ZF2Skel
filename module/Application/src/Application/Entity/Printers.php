@@ -8,16 +8,34 @@ use Doctrine\ORM\Mapping as ORM;
  * Printers
  *
  * @ORM\Entity
- * @ORM\Table(name="Printers")
+ * @ORM\Table(name="Printers", uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="UniquePrinterId_idx", columns={"PrinterId"}),
+ *      @ORM\UniqueConstraint(name="UniquePrinterName_idx", columns={"PrinterName"})
+ *   }
+ * )
  */
 class Printers extends ListItems
 {
+    /**
+     * legacy unique identifier
+     *
+     * @var integer
+     *
+     * @ORM\Column(name="PrinterId", type="integer", nullable=true)
+     */
+    protected $PrinterId;
+
     /**
      * @var string
      *
      * @ORM\Column(name="PrinterName", type="string", length=64, nullable=false)
      */
     protected $PrinterName;
+
+    public function __construct() {
+        parent::__construct();
+        $this->setEntityName(__CLASS__);
+    }
 
     /**
      * Get PrinterId
@@ -26,15 +44,18 @@ class Printers extends ListItems
      */
     public function getPrinterId()
     {
-        return $this->getMemberId();
+        return $this->PrinterId;
     }
 
     /**
      * @param integer $printerId
      * @return ListXref
      */
-    public function setPrinterId($printerId) {
-        return $this->setMemberId($printerId);
+    public function setPrinterId($printerId)
+    {
+        $this->PrinterId = $printerId;
+
+        return $this;
     }
 
     /**

@@ -8,16 +8,34 @@ use Doctrine\ORM\Mapping as ORM;
  * Papers
  *
  * @ORM\Entity
- * @ORM\Table(name="Papers")
+ * @ORM\Table(name="Papers", uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="UniquePaperId_idx", columns={"PaperId"}),
+ *      @ORM\UniqueConstraint(name="UniquePaperName_idx", columns={"PaperName"})
+ *   }
+ * )
  */
 class Papers extends ListItems
 {
+    /**
+     * legacy unique identifier
+     *
+     * @var integer
+     *
+     * @ORM\Column(name="PaperId", type="integer", nullable=true)
+     */
+    protected $PaperId;
+
     /**
      * @var string
      *
      * @ORM\Column(name="PaperName", type="string", length=64, nullable=false)
      */
     protected $PaperName;
+
+    public function __construct() {
+        parent::__construct();
+        $this->setEntityName(__CLASS__);
+    }
 
     /**
      * Get PaperId
@@ -26,15 +44,18 @@ class Papers extends ListItems
      */
     public function getPaperId()
     {
-        return $this->getMemberId();
+        return $this->PaperId;
     }
 
     /**
      * @param integer $paperId
      * @return ListXref
      */
-    public function setPaperId($paperId) {
-        return $this->setMemberId($paperId);
+    public function setPaperId($paperId)
+    {
+        $this->PaperId = $paperId;
+
+        return $this;
     }
 
     /**

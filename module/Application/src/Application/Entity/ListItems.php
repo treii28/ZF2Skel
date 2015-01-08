@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="ListItems", uniqueConstraints={@ORM\UniqueConstraint(name="ListMember_idx", columns={"ListItemId", "MemberId"})})
+ * @ORM\Table(name="ListItems")
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({"item" = "ListItems", "value" = "Values", "material" = "Materials", "printer" = "Printers", "paper" = "Papers"})
@@ -28,13 +28,6 @@ class ListItems
      * @ORM\Column(name="ListId", type="integer", nullable=false)
      */
     protected $ListId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="MemberId", type="integer", nullable=false)
-     */
-    protected $MemberId;
 
     /**
      * @var string
@@ -78,29 +71,6 @@ class ListItems
     public function getListId()
     {
         return $this->ListId;
-    }
-
-    /**
-     * Set MemberId
-     *
-     * @param integer $memberId
-     * @return ListXref
-     */
-    public function setMemberId($memberId)
-    {
-        $this->MemberId = $memberId;
-
-        return $this;
-    }
-
-    /**
-     * Get MemberId
-     *
-     * @return integer 
-     */
-    public function getMemberId()
-    {
-        return $this->MemberId;
     }
 
     /**

@@ -36,11 +36,11 @@ class ListController extends AbstractController
         */
 
         //$ListItem = new \Application\Entity\ListItems();
-        $MaterialItem = new \Application\Entity\Materials();
-        $MaterialItem->setList($List);
-        $MaterialItem->setMemberId(1);
-        $MaterialItem->setMaterialName('Cotton');
-        $em->persist($MaterialItem);
+        $PaperItem = new \Application\Entity\Papers();
+        $PaperItem->setList($List);
+        $PaperItem->setMemberId(1);
+        $PaperItem->setPaperName('Cotton');
+        $em->persist($PaperItem);
         $em->flush();
         return new ViewModel();
     }

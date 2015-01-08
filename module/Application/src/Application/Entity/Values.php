@@ -8,16 +8,34 @@ use Doctrine\ORM\Mapping as ORM;
  * Values
  *
  * @ORM\Entity
- * @ORM\Table(name="Values")
+ * @ORM\Table(name="Values", uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="UniqueValueId_idx", columns={"ValueId"}),
+ *      @ORM\UniqueConstraint(name="UniqueValueName_idx", columns={"ValueName"})
+ *   }
+ * )
  */
 class Values extends ListItems
 {
+    /**
+     * legacy unique identifier
+     *
+     * @var integer
+     *
+     * @ORM\Column(name="ValueId", type="integer", nullable=true)
+     */
+    protected $ValueId;
+
     /**
      * @var string
      *
      * @ORM\Column(name="ValueName", type="string", length=64, nullable=false)
      */
     protected $ValueName;
+
+    public function __construct() {
+        parent::__construct();
+        $this->setEntityName(__CLASS__);
+    }
 
     /**
      * Get ValueId
@@ -26,15 +44,18 @@ class Values extends ListItems
      */
     public function getValueId()
     {
-        return $this->getMemberId();
+        return $this->ValueId;
     }
 
     /**
      * @param integer $valueId
      * @return ListXref
      */
-    public function setValueId($valueId) {
-        return $this->setMemberId($valueId);
+    public function setValueId($valueId)
+    {
+        $this->ValueId = $valueId;
+
+        return $this;
     }
 
     /**

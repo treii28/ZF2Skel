@@ -8,10 +8,23 @@ use Doctrine\ORM\Mapping as ORM;
  * Materials
  *
  * @ORM\Entity
- * @ORM\Table(name="Materials")
+ * @ORM\Table(name="Materials", uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="UniqueMaterialId_idx", columns={"MaterialId"}),
+ *      @ORM\UniqueConstraint(name="UniqueMaterialName_idx", columns={"MaterialName"})
+ *   }
+ * )
  */
 class Materials extends ListItems
 {
+    /**
+     * legacy unique identifier
+     *
+     * @var integer
+     *
+     * @ORM\Column(name="MaterialId", type="integer", nullable=true)
+     */
+    protected $MaterialId;
+
     /**
      * @var string $MaterialName
      *
@@ -19,11 +32,16 @@ class Materials extends ListItems
      */
     protected $MaterialName;
 
+    public function __construct() {
+        parent::__construct();
+        $this->setEntityName(__CLASS__);
+    }
+
     /**
      * @return int
      */
     public function getMaterialId() {
-        return $this->getMemberId();
+        return $this->MaterialId;
     }
 
     /**
@@ -31,12 +49,9 @@ class Materials extends ListItems
      * @return ListXref
      */
     public function setMaterialId($materialId) {
-        return $this->setMemberId($materialId);
-    }
+        $this->MaterialId = $materialId;
 
-    public function __construct() {
-        parent::__construct();
-        $this->setEntityName(__CLASS__);
+        return $this;
     }
 
     /**
