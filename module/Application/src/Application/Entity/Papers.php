@@ -7,27 +7,35 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Papers
  *
- * @ORM\Table(name="Papers")
  * @ORM\Entity
+ * @ORM\Table(name="Papers")
  */
-class Papers
+class Papers extends ListItems
 {
     /**
      * @var string
      *
      * @ORM\Column(name="PaperName", type="string", length=64, nullable=false)
      */
-    private $PaperName;
+    protected $PaperName;
 
     /**
-     * @var integer
+     * Get PaperId
      *
-     * @ORM\Column(name="PaperId", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer
      */
-    private $PaperId;
+    public function getPaperId()
+    {
+        return $this->getMemberId();
+    }
 
+    /**
+     * @param integer $paperId
+     * @return ListXref
+     */
+    public function setPaperId($paperId) {
+        return $this->setMemberId($paperId);
+    }
 
     /**
      * Set PaperName
@@ -53,22 +61,9 @@ class Papers
     }
 
     /**
-     * Get PaperId
-     *
-     * @return integer 
+     * @return string
      */
-    public function getPaperId()
-    {
-        return $this->PaperId;
-    }
-
-    // alias functions
-
-    public function getId() {
-        return $this->getPaperId();
-    }
-
-    public function getName() {
-        return $this->getPaperName();
+    public function getItemEntity() {
+        return __CLASS__;
     }
 }

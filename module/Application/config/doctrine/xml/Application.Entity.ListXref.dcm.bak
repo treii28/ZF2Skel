@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\ListXrefs" table="ListXrefs">
+    <unique-constraints>
+      <unique-constraint columns="SubListId,SubListItemId" name="SubListItem_idx" />
+    </unique-constraints>
+
+    <field name="SubListItemId" type="integer" column="SubListItemId" nullable="false">
+      <options>
+        <option name="unsigned">true</option>
+      </options>
+    </field>
+
+    <attribute-overrides>
+      <attribute-override name="ListItemId">
+        <field column="ListXrefId" />
+      </attribute-override>
+      <attribute-override name="MemberId">
+        <field column="SubListId" />
+      </attribute-override>
+    </attribute-overrides>
+  </entity>
+</doctrine-mapping>

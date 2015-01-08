@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\ListXref" table="ListXref">
-
+  <mapped-superclass name="Application\Entity\ListItems">
     <unique-constraints>
       <unique-constraint columns="ListId,MemberId" name="ListMember_idx" />
     </unique-constraints>
 
-    <id name="listXrefId" type="integer" column="listXrefId">
+    <id name="ListItemId" type="integer" column="ListItemId">
       <generator strategy="IDENTITY"/>
     </id>
     <field name="ListId" type="integer" column="ListId" nullable="false">
@@ -19,10 +18,12 @@
         <option name="unsigned">true</option>
       </options>
     </field>
+    <field name="EntityName" type="string" column="EntityName" length="64" nullable="true"/>
     <many-to-one field="list" target-entity="Application\Entity\Lists">
       <join-columns>
         <join-column name="ListId" referenced-column-name="ListId"/>
       </join-columns>
     </many-to-one>
-  </entity>
+  </mapped-superclass>
 </doctrine-mapping>
+

@@ -20,7 +20,28 @@ class ListController extends AbstractController
 
     public function indexAction()
     {
+        $em = $this->getMapper()->getEntityManager();
+        //$Type = $this->getTypeMapper()->findRecordById(1);
+        $List = $this->getMapper()->findRecordById(1);
+        /*
+        $Type = new \Application\Entity\Types();
+        $Type->setTypeName('MaterialCollection');
+        $em->persist($Type);
+        $em->flush();
+        $List = new \Application\Entity\Lists();
+        $List->setType($Type);
+        $List->setListName('My Materials');
+        $em->persist($List);
+        $em->flush();
+        */
 
+        //$ListItem = new \Application\Entity\ListItems();
+        $MaterialItem = new \Application\Entity\Materials();
+        $MaterialItem->setList($List);
+        $MaterialItem->setMemberId(1);
+        $MaterialItem->setMaterialName('Cotton');
+        $em->persist($MaterialItem);
+        $em->flush();
         return new ViewModel();
     }
 

@@ -22,9 +22,23 @@ class ListXref
     /**
      * @var integer
      *
+     * @ORM\Column(name="SubListId", type="integer", nullable=true)
+     */
+    private $SubListId;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="MemberId", type="integer", nullable=false)
      */
     private $MemberId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="EntityName", type="string", length=64, nullable=true)
+     */
+    private $EntityName;
 
     /**
      * @var integer
@@ -44,6 +58,16 @@ class ListXref
      * })
      */
     private $list;
+
+    /**
+     * @var \Application\Entity\Lists
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Lists")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="SubListId", referencedColumnName="ListId")
+     * })
+     */
+    private $sublist;
 
 
     /**
@@ -70,6 +94,29 @@ class ListXref
     }
 
     /**
+     * Set SubListId
+     *
+     * @param integer $subListId
+     * @return ListXref
+     */
+    public function setSubListId($subListId)
+    {
+        $this->SubListId = $subListId;
+
+        return $this;
+    }
+
+    /**
+     * Get SubListId
+     *
+     * @return integer 
+     */
+    public function getSubListId()
+    {
+        return $this->SubListId;
+    }
+
+    /**
      * Set MemberId
      *
      * @param integer $memberId
@@ -90,6 +137,29 @@ class ListXref
     public function getMemberId()
     {
         return $this->MemberId;
+    }
+
+    /**
+     * Set EntityName
+     *
+     * @param string $entityName
+     * @return ListXref
+     */
+    public function setEntityName($entityName)
+    {
+        $this->EntityName = $entityName;
+
+        return $this;
+    }
+
+    /**
+     * Get EntityName
+     *
+     * @return string 
+     */
+    public function getEntityName()
+    {
+        return $this->EntityName;
     }
 
     /**
@@ -123,5 +193,28 @@ class ListXref
     public function getList()
     {
         return $this->list;
+    }
+
+    /**
+     * Set sublist
+     *
+     * @param \Application\Entity\Lists $sublist
+     * @return ListXref
+     */
+    public function setSublist(\Application\Entity\Lists $sublist = null)
+    {
+        $this->sublist = $sublist;
+
+        return $this;
+    }
+
+    /**
+     * Get sublist
+     *
+     * @return \Application\Entity\Lists 
+     */
+    public function getSublist()
+    {
+        return $this->sublist;
     }
 }

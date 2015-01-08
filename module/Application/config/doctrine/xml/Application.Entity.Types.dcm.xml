@@ -5,7 +5,6 @@
       <generator strategy="IDENTITY"/>
     </id>
     <field name="TypeName" type="string" column="TypeName" length="64" nullable="false"/>
-    <field name="EntityName" type="string" column="EntityName" length="64" nullable="true"/>
     <field name="ListId" type="integer" column="ListId" nullable="false">
       <options>
         <option name="unsigned">true</option>

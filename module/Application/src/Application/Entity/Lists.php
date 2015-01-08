@@ -38,12 +38,12 @@ class Lists
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Application\Entity\ListXref", mappedBy="ListId", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="Application\Entity\ListItems", mappedBy="ListId", cascade={"all"})
      * @ORM\OrderBy({
      *     "MemberId"="ASC"
      * })
      */
-    private $Xref;
+    private $Item;
 
     /**
      * @var \Application\Entity\Types
@@ -60,7 +60,7 @@ class Lists
      */
     public function __construct()
     {
-        $this->Xref = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->Item = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -120,36 +120,36 @@ class Lists
     }
 
     /**
-     * Add Xref
+     * Add Item
      *
-     * @param \Application\Entity\ListXref $xref
+     * @param \Application\Entity\ListItems $item
      * @return Lists
      */
-    public function addXref(\Application\Entity\ListXref $xref)
+    public function addItem(\Application\Entity\ListItems $item)
     {
-        $this->Xref[] = $xref;
+        $this->Item[] = $item;
 
         return $this;
     }
 
     /**
-     * Remove Xref
+     * Remove Item
      *
-     * @param \Application\Entity\ListXref $xref
+     * @param \Application\Entity\ListItems $item
      */
-    public function removeXref(\Application\Entity\ListXref $xref)
+    public function removeItem(\Application\Entity\ListItems $item)
     {
-        $this->Xref->removeElement($xref);
+        $this->Item->removeElement($item);
     }
 
     /**
-     * Get Xref
+     * Get Item
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getXref()
+    public function getItem()
     {
-        return $this->Xref;
+        return $this->Item;
     }
 
     /**
@@ -160,6 +160,7 @@ class Lists
      */
     public function setType(\Application\Entity\Types $type = null)
     {
+        $this->setTypeId($type->getTypeId());
         $this->type = $type;
 
         return $this;

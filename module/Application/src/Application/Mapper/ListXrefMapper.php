@@ -8,8 +8,8 @@
 
 namespace Application\Mapper;
 
-use Application\Entity\Lists;
-use Doctrine\ORM\EntityRepository;
+//use Application\Entity\Lists;
+//use Doctrine\ORM\EntityRepository;
 //use Application\Entity\ListXref;
 //use Application\Entity\Types;
 
@@ -35,7 +35,7 @@ class ListXrefMapper extends AbstractMapper {
         $entityName = (class_exists('Application\\Entity\\Lists\\'.$typeName)) ? 'Application\\Entity\\Lists\\'.$typeName : 'Application\\Entity\\ListXref';
         return $entityName;
         */
-        return 'Application\\Entity\\ListXref';
+        return self::ENTITY_NAME;
     }
 
 

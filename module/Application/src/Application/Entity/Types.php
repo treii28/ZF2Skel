@@ -20,20 +20,6 @@ class Types
     private $TypeName;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="EntityName", type="string", length=64, nullable=true)
-     */
-    private $EntityName;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="ListId", type="integer", nullable=false)
-     */
-    private $ListId;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="TypeId", type="integer")
@@ -64,52 +50,6 @@ class Types
     public function getTypeName()
     {
         return $this->TypeName;
-    }
-
-    /**
-     * Set EntityName
-     *
-     * @param string $entityName
-     * @return Types
-     */
-    public function setEntityName($entityName)
-    {
-        $this->EntityName = $entityName;
-
-        return $this;
-    }
-
-    /**
-     * Get EntityName
-     *
-     * @return string 
-     */
-    public function getEntityName()
-    {
-        return $this->EntityName;
-    }
-
-    /**
-     * Set ListId
-     *
-     * @param integer $listId
-     * @return Types
-     */
-    public function setListId($listId)
-    {
-        $this->ListId = $listId;
-
-        return $this;
-    }
-
-    /**
-     * Get ListId
-     *
-     * @return integer 
-     */
-    public function getListId()
-    {
-        return $this->ListId;
     }
 
     /**

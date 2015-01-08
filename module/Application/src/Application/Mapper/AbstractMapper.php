@@ -12,6 +12,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 
 class AbstractMapper implements ServiceLocatorAwareInterface
 {
@@ -22,6 +23,10 @@ class AbstractMapper implements ServiceLocatorAwareInterface
      * @var \Doctrine\ORM\EntityManager; $em
      */
     private $entity_manager;
+    /**
+     * @var \Doctrine\ORM\QueryBuilder $query_builder
+     */
+    private $query_builder;
 
     /**
      * @var \Doctrine\ORM\EntityRespository $repository
@@ -55,6 +60,18 @@ class AbstractMapper implements ServiceLocatorAwareInterface
         }
 
         return $this->entity_manager;
+    }
+
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        if (!($this->query_builder instanceof QueryBuilder)) {
+            $this->query_builder = $this->getEntityManager()->createQueryBuilder();
+        }
+
+        return $this->query_builder;
     }
 
     public function findAll() {

@@ -7,27 +7,35 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Printers
  *
- * @ORM\Table(name="Printers")
  * @ORM\Entity
+ * @ORM\Table(name="Printers")
  */
-class Printers
+class Printers extends ListItems
 {
     /**
      * @var string
      *
      * @ORM\Column(name="PrinterName", type="string", length=64, nullable=false)
      */
-    private $PrinterName;
+    protected $PrinterName;
 
     /**
-     * @var integer
+     * Get PrinterId
      *
-     * @ORM\Column(name="PrinterId", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer
      */
-    private $PrinterId;
+    public function getPrinterId()
+    {
+        return $this->getMemberId();
+    }
 
+    /**
+     * @param integer $printerId
+     * @return ListXref
+     */
+    public function setPrinterId($printerId) {
+        return $this->setMemberId($printerId);
+    }
 
     /**
      * Set PrinterName
@@ -53,22 +61,9 @@ class Printers
     }
 
     /**
-     * Get PrinterId
-     *
-     * @return integer 
+     * @return string
      */
-    public function getPrinterId()
-    {
-        return $this->PrinterId;
-    }
-
-    // alias functions
-
-    public function getId() {
-        return $this->getPrinterId();
-    }
-
-    public function getName() {
-        return $this->getPrinterName();
+    public function getItemEntity() {
+        return __CLASS__;
     }
 }

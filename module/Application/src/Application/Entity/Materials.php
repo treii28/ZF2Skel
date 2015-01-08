@@ -7,27 +7,37 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Materials
  *
- * @ORM\Table(name="Materials")
  * @ORM\Entity
+ * @ORM\Table(name="Materials")
  */
-class Materials
+class Materials extends ListItems
 {
     /**
-     * @var string
+     * @var string $MaterialName
      *
      * @ORM\Column(name="MaterialName", type="string", length=64, nullable=false)
      */
-    private $MaterialName;
+    protected $MaterialName;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="MaterialId", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return int
      */
-    private $MaterialId;
+    public function getMaterialId() {
+        return $this->getMemberId();
+    }
 
+    /**
+     * @param integer $materialId
+     * @return ListXref
+     */
+    public function setMaterialId($materialId) {
+        return $this->setMemberId($materialId);
+    }
+
+    public function __construct() {
+        parent::__construct();
+        $this->setEntityName(__CLASS__);
+    }
 
     /**
      * Set MaterialName
@@ -45,30 +55,14 @@ class Materials
     /**
      * Get MaterialName
      *
-     * @return string 
+     * @return string
      */
     public function getMaterialName()
     {
         return $this->MaterialName;
     }
 
-    /**
-     * Get MaterialId
-     *
-     * @return integer 
-     */
-    public function getMaterialId()
-    {
-        return $this->MaterialId;
-    }
-
-    // alias functions
-
-    public function getId() {
-        return $this->getMaterialId();
-    }
-
-    public function getName() {
-        return $this->getMaterialName();
+    public function getItemEntity() {
+        return __CLASS__;
     }
 }
