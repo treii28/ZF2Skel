@@ -49,7 +49,7 @@ class Papers extends ListItems
 
     /**
      * @param integer $paperId
-     * @return ListXref
+     * @return ListItems
      */
     public function setPaperId($paperId)
     {

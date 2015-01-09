@@ -22,17 +22,4 @@ class TypeMapper extends AbstractMapper {
     public function findRecordByName($name) {
         return $this->getRepo()->findOneBy(array('TypeName' => $name));
     }
-
-    /**
-     * @param integer|string $id
-     * @return string
-     * @throws \Exception on type not found
-     */
-    public function getTypeEntityName($id) {
-        $type = (intval($id > 0)) ? $this->findRecordById($id) : $this->findRecordByName($id);
-        if(!($type instanceof Types)) {
-            throw new \Exception(__METHOD__ . " Types record not found for '$id'");
-        }
-        return 'Application\\Entity\\' . $type->getEntityName();
-    }
 }

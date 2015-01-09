@@ -21,15 +21,15 @@ class ListMapper extends AbstractMapper {
     private $_typeMapper;
 
     /**
-     * @var ListXrefMapper $_xrefMapper
+     * @var ListItemsMapper $_listitemsMapper
      */
-    private $_xrefMapper;
+    private $_listitemsMapper;
 
     /**
      * @param string $name
      * @return null|Lists
      */
-    public function getListByName($name) {
+    public function findRecordByName($name) {
         return $this->getRepo()->findOneBy(array('ListName' => $name));
     }
 
@@ -39,6 +39,60 @@ class ListMapper extends AbstractMapper {
      */
     public function getListById($id) {
         return $this->getRepo()->find($id);
+    }
+
+    public function populateListItems(\Application\Entity\Lists &$list) {
+        $rawSubItems = $this->getListItemsMapper()->getRepo()->findBy(array('ListId' => $list->getListId()));
+        $list->initListitems();
+        foreach($rawSubItems as $subItem) {
+            if($subItem instanceof \Application\Entity\Sublists) {
+                $list->addListitem($this->getSublistRef($subItem->getSublistId()));
+            } elseif($subItem instanceof \Application\Entity\Subitems) {
+                $list->addListitem($this->getSubitemRef($subItem->getSubitemId()));
+            } else {
+                $list->addListitem($this->getItemRef($subItem->getItemId(), $subItem->getEntityName()));
+            }
+        }
+    }
+
+    /**
+     * @param integer $subitemId
+     * @return \Application\Entity\ListItems
+     */
+    private function getSubitemRef($subitemId) {
+        $subItemRef = $this->getListItemsMapper()->getRepo()->findBy(array('SubitemId' => $subitemId));
+        while(($subItemRef instanceof \Application\Entity\Subitems) || ($subItemRef instanceof \Application\Entity\Sublists)) {
+            if($subItemRef instanceof \Application\Entity\Subitems) { // keep recursively following references with incursion of this method
+                $subItemRef = $this->getSubitemRef($subItemRef->getSubitemId());
+            }
+            if($subItemRef instanceof \Application\Entity\Sublists) {
+                $subItemRef = $this->$this->getRepo()->find($subItemRef->getSubitemId());
+                $this->populateListItems($subList);
+                return $subItemRef;
+            }
+        }
+
+        return $this->getItemRef($subItemRef->getSubitemId(), $subItemRef->getEntityName());
+    }
+
+    /**
+     * @param integer $itemId
+     * @param string $entityName
+     * @return \Application\Entity\ListItems|null
+     */
+    private function getItemRef($itemId,$entityName) {
+        $refRepo = $this->getEntityManager()->getRepository($entityName);
+        return $refRepo->find($itemId);
+    }
+
+    /**
+     * @param integer $sublistId
+     * @return \Application\Entity\Lists
+     */
+    private function getSublistRef($sublistId) {
+        $subList = $this->getRepo()->find($sublistId);
+        $this->populateListItems($subList);
+        return $subList;
     }
 
     /**
@@ -60,7 +114,7 @@ class ListMapper extends AbstractMapper {
      * @throws \Exception on list not found
      */
     public function getListTypeName($id) {
-        $list = (intval($id > 0)) ? $this->getListById($id) : $this->getListByName($id);
+        $list = (intval($id > 0)) ? $this->findRecordById($id) : $this->findRecordByName($id);
         if(!($list instanceof Lists)) {
             throw new \Exception(__METHOD__ . " Lists record not found for '$id'");
         }
@@ -92,12 +146,12 @@ class ListMapper extends AbstractMapper {
     }
 
     /**
-     * @return ListXrefMapper
+     * @return ListItemsMapper
      */
-    public function getListXrefMapper() {
-        if(!($this->_xrefMapper instanceof ListXrefMapper)) {
-            $this->_xrefMapper = $this->getServiceLocator()->get('ListXrefMapper');
+    public function getListItemsMapper() {
+        if(!($this->_listitemsMapper instanceof ListItemsMapper)) {
+            $this->_listitemsMapper = $this->getServiceLocator()->get('ListItemsMapper');
         }
-        return $this->_xrefMapper;
+        return $this->_listitemsMapper;
     }
 }

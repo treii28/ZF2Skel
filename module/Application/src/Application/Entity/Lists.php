@@ -43,7 +43,7 @@ class Lists
      *     "MemberId"="ASC"
      * })
      */
-    private $Item;
+    private $Listitems;
 
     /**
      * @var \Application\Entity\Types
@@ -60,7 +60,11 @@ class Lists
      */
     public function __construct()
     {
-        $this->Item = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->initListitems();
+    }
+
+    public function initListitems() {
+        $this->Listitems = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -120,36 +124,40 @@ class Lists
     }
 
     /**
-     * Add Item
+     * Add Listitem
      *
-     * @param \Application\Entity\ListItems $item
-     * @return Lists
+     * @param \Application\Entity\ListItems|\Application\Entity\Lists $listitem
+     * @return \Application\Entity\Lists
+     * @throws \Exception on invalid listitem type
      */
-    public function addItem(\Application\Entity\ListItems $item)
+    public function addListitem($listitem)
     {
-        $this->Item[] = $item;
+        if(!(($listitem instanceof ListItems) || $listitem instanceof Lists)) {
+            throw new \Exception(__METHOD__ . "can only add instances of Lists or inherited from ListItems");
+        }
+        $this->Listitems->add($listitem);
 
         return $this;
     }
 
     /**
-     * Remove Item
+     * Remove Listitem
      *
-     * @param \Application\Entity\ListItems $item
+     * @param \Application\Entity\ListItems $listitem
      */
-    public function removeItem(\Application\Entity\ListItems $item)
+    public function removeListitem(\Application\Entity\ListItems $listitem)
     {
-        $this->Item->removeElement($item);
+        $this->Listitems->removeElement($listitem);
     }
 
     /**
-     * Get Item
+     * Get Listitems
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getItem()
+    public function getListitems()
     {
-        return $this->Item;
+        return $this->Listitems;
     }
 
     /**

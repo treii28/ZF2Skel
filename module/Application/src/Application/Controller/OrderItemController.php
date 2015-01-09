@@ -4,10 +4,10 @@ namespace Application\Controller;
 
 use Application\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
-use Application\Entity\Product;
-use Application\Mapper\ProductMapper;
+use Application\Entity\OrderItem;
+use Application\Mapper\OrderItemMapper;
 
-class ProductController extends AbstractController
+class OrderItemController extends AbstractController
 {
     public function indexAction()
     {
@@ -26,14 +26,14 @@ class ProductController extends AbstractController
     }
 
 
-    protected function getProduct($productId=null)
+    protected function getOrderItem($orderItemId=null)
     {
-        $product = ((is_null($productId)) ?
-            new Product()
+        $orderItem = ((is_null($orderItemId)) ?
+            new OrderItem()
             :
-            $this->getMapper()->findRecordById($productId)
+            $this->getMapper()->findRecordById($orderItemId)
         );
 
-        return $product;
+        return $orderItem;
     }
 }

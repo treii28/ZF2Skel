@@ -49,7 +49,7 @@ class Values extends ListItems
 
     /**
      * @param integer $valueId
-     * @return ListXref
+     * @return ListItems
      */
     public function setValueId($valueId)
     {

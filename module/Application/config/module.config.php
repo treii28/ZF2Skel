@@ -46,7 +46,7 @@ return array(
                 'options' => array(
                     'route'    => '/',
                     'defaults' => array(
-                        'controller' => 'Application\Controller\Index',
+                        'controller' => 'IndexController',
                         'action'     => 'index',
                     ),
                 ),
@@ -61,7 +61,7 @@ return array(
                         'id'     => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'Application\Controller\User',
+                        'controller' => 'UserController',
                         'action'     => 'index',
                     ),
                 ),
@@ -76,7 +76,7 @@ return array(
                         'id'     => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'Application\Controller\List',
+                        'controller' => 'ListController',
                         'action'     => 'index',
                     ),
                 ),
@@ -91,7 +91,7 @@ return array(
                         'id'     => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'Application\Controller\Order',
+                        'controller' => 'OrderController',
                         'action'     => 'index',
                     ),
                 ),
@@ -105,7 +105,7 @@ return array(
                         'id'     => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'Application\Controller\OrderItem',
+                        'controller' => 'OrderItemController',
                         'action'     => 'index',
                     ),
                 ),
@@ -119,7 +119,22 @@ return array(
                         'id'     => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'Application\Controller\Product',
+                        'controller' => 'ProductController',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+
+            'migration' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/migration[/][:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'MigrationController',
                         'action'     => 'index',
                     ),
                 ),
@@ -194,9 +209,13 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController',
-            'Application\Controller\User'  => 'Application\Controller\UserController',
-            'Application\Controller\List'  => 'Application\Controller\ListController'
+            'IndexController'     => 'Application\Controller\IndexController',
+            'UserController'      => 'Application\Controller\UserController',
+            'ListController'      => 'Application\Controller\ListController',
+            'ProductController'   => 'Application\Controller\ProductController',
+            'OrderController'     => 'Application\Controller\OrderController',
+            'OrderItemController' => 'Application\Controller\OrderItemController',
+            'MigrationController' => 'Application\Controller\MigrationController',
         ),
     ),
     'view_manager' => array(

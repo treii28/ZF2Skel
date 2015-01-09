@@ -16,9 +16,10 @@ class AbstractController  extends AbstractActionController
 {
     const MAPPER_NAME = '';
     /**
-     * @var \Doctrine\ORM\EntityManager $_objectManager
+     * @var \Doctrine\ORM\EntityManager $entity_manager
      */
-    protected $_objectManager;
+    protected $entity_manager;
+
     /**
      * @var \Application\Mapper\AbstractMapper $_Mapper
      */
@@ -54,4 +55,33 @@ class AbstractController  extends AbstractActionController
         return $this->_Mapper;
     }
 
+    /**
+     * @param array|null $alsoignore
+     * @return array
+     */
+    public function getActionNames($alsoignore=null) {
+        $actionList = array();
+        $ignore = array('notFoundAction','getMethodFromAction');
+        if(is_array($alsoignore)) {
+            $ignore = array_merge($ignore, $alsoignore);
+        }
+        foreach(get_class_methods(get_called_class()) as $method) {
+            if(!in_array($method, $ignore) && preg_match('/^([\w\d_]*)Action$/', $method, $matches)) {
+                array_push($actionList, $matches[1]);
+            }
+        }
+        return $actionList;
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
+    public function getEntityManager()
+    {
+        if (!($this->entity_manager instanceof EntityManager)) {
+            $this->entity_manager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+        }
+
+        return $this->entity_manager;
+    }
 }

@@ -10,9 +10,9 @@ use Application\Mapper\ListXrefMapper;
 class ListController extends AbstractController
 {
     /**
-     * @var \Doctrine\ORM\EntityManager $_objectManager
+     * @var \Doctrine\ORM\EntityManager $entity_manager
      */
-    protected $_objectManager;
+    protected $entity_manager;
     /**
      * @var ListMapper $_Mapper
      */

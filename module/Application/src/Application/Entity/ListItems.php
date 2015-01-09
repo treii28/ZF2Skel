@@ -9,7 +9,15 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ListItems")
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
- * @ORM\DiscriminatorMap({"item" = "ListItems", "value" = "Values", "material" = "Materials", "printer" = "Printers", "paper" = "Papers"})
+ * @ORM\DiscriminatorMap({
+ *      "item"     = "ListItems",
+ *      "sublist"  = "Sublists",
+ *      "subitem"  = "Subitems",
+ *      "value"    = "Values",
+ *      "material" = "Materials",
+ *      "printer"  = "Printers",
+ *      "paper"    = "Papers"
+ * })
  */
 class ListItems
 {
@@ -54,7 +62,7 @@ class ListItems
      * Set ListId
      *
      * @param integer $listId
-     * @return ListXref
+     * @return ListItems
      */
     public function setListId($listId)
     {
@@ -77,7 +85,7 @@ class ListItems
      * Set EntityName
      *
      * @param string $entityName
-     * @return ListXref
+     * @return ListItems
      */
     protected function setEntityName($entityName)
     {
@@ -112,7 +120,7 @@ class ListItems
      * @param \Application\Entity\Lists $list
      * @return ListItem
      */
-    public function setList(\Application\Entity\Lists $list = null)
+    public function setList(\Application\Entity\Lists $list)
     {
         $this->setListId($list->getListId());
         $this->list = $list;

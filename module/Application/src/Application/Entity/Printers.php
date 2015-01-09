@@ -49,7 +49,7 @@ class Printers extends ListItems
 
     /**
      * @param integer $printerId
-     * @return ListXref
+     * @return ListItems
      */
     public function setPrinterId($printerId)
     {

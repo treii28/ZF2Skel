@@ -46,7 +46,7 @@ class Materials extends ListItems
 
     /**
      * @param integer $materialId
-     * @return ListXref
+     * @return ListItems
      */
     public function setMaterialId($materialId) {
         $this->MaterialId = $materialId;

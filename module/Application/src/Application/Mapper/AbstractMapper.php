@@ -20,7 +20,7 @@ class AbstractMapper implements ServiceLocatorAwareInterface
 
     protected $service_manager;
     /**
-     * @var \Doctrine\ORM\EntityManager; $em
+     * @var \Doctrine\ORM\EntityManager; $entity_manager
      */
     private $entity_manager;
     /**
@@ -29,9 +29,9 @@ class AbstractMapper implements ServiceLocatorAwareInterface
     private $query_builder;
 
     /**
-     * @var \Doctrine\ORM\EntityRespository $repository
+     * @var \Doctrine\ORM\EntityRespository[] $repository
      */
-    private $repository;
+    private $repositories = array();
 
     public function __construct() { }
 
@@ -51,7 +51,7 @@ class AbstractMapper implements ServiceLocatorAwareInterface
     }
 
     /**
-     * @return array|\Doctrine\ORM\EntityManager
+     * @return \Doctrine\ORM\EntityManager
      */
     public function getEntityManager()
     {
@@ -101,7 +101,6 @@ class AbstractMapper implements ServiceLocatorAwareInterface
     protected function _getEntityName() {
         $cclass = '\\'.get_called_class();
         $centity = (defined($cclass::ENTITY_NAME)) ? $cclass::ENTITY_NAME : '';
-        $foo = \Application\Mapper\Lists\MaterialCollectionMapper::ENTITY_NAME;
         if(!empty($centity) && class_exists($centity)) {
             return $centity;
         } elseif(class_exists('Application\\Entity\\'.$this->_getBaseName().'s')) {
@@ -113,10 +112,21 @@ class AbstractMapper implements ServiceLocatorAwareInterface
         }
     }
 
-    public function getRepo() {
-        if(!($this->repository instanceof EntityRepository)) {
-            $this->repository = $this->getEntityManager()->getRepository($this->_getEntityName());
+    /**
+     * @param null|string $entity_name
+     * @return EntityRepository|\Doctrine\ORM\EntityRespository
+     * @throws \Exception on Entity not found
+     */
+    public function getRepo($entity_name = null) {
+        if(is_null($entity_name)) {
+            $entity_name = $this->_getEntityName();
         }
-        return $this->repository;
+        if(!(class_exists($entity_name))) {
+            throw new \Exception(__METHOD__ . " unable to find repository, class '$entity_name' not found");
+        }
+        if(!($this->repositories[$entity_name] instanceof EntityRepository)) {
+            $this->repositories[$entity_name] = $this->getEntityManager()->getRepository($entity_name);
+        }
+        return $this->repositories[$entity_name];
     }
 }

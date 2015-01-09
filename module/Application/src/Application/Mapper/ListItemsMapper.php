@@ -10,12 +10,12 @@ namespace Application\Mapper;
 
 //use Application\Entity\Lists;
 //use Doctrine\ORM\EntityRepository;
-//use Application\Entity\ListXref;
+//use Application\Entity\ListItems;
 //use Application\Entity\Types;
 
-class ListXrefMapper extends AbstractMapper {
+class ListItemsMapper extends AbstractMapper {
 
-    const ENTITY_NAME = 'Application\\Entity\\ListXref';
+    const ENTITY_NAME = 'Application\\Entity\\ListItems';
 
     const TYPE_NAME =  "";
 
@@ -32,7 +32,7 @@ class ListXrefMapper extends AbstractMapper {
         /*
         $cclass = get_called_class();
         $typeName = $cclass::TYPE_NAME;
-        $entityName = (class_exists('Application\\Entity\\Lists\\'.$typeName)) ? 'Application\\Entity\\Lists\\'.$typeName : 'Application\\Entity\\ListXref';
+        $entityName = (class_exists('Application\\Entity\\Lists\\'.$typeName)) ? 'Application\\Entity\\Lists\\'.$typeName : 'Application\\Entity\\ListItems';
         return $entityName;
         */
         return self::ENTITY_NAME;
@@ -40,7 +40,7 @@ class ListXrefMapper extends AbstractMapper {
 
 
     /**
-     * @param \Application\Entity\ListXref $listRef
+     * @param \Application\Entity\ListItems $listRef
      * @return string
      */
     public function getListRefEntityName($listRef) {
@@ -49,7 +49,7 @@ class ListXrefMapper extends AbstractMapper {
     }
 
     /**
-     * @param \Application\Entity\ListXref $listRef
+     * @param \Application\Entity\ListItems $listRef
      * @return \Doctrine\ORM\EntityRepository
      */
     public function getListRefRepo($listRef) {
@@ -58,14 +58,14 @@ class ListXrefMapper extends AbstractMapper {
     }
 
     public function findRecordsByListName($listName) {
-        $list = $this->getListMapper()->getListByName($listName);
-        $listXrefs = $this->getRepo()->findBy(array('ListId' => $list->getListId()));
-        return $listXrefs;
+        $list = $this->getListMapper()->findRecordByName($listName);
+        $listItemss = $this->getRepo()->findBy(array('ListId' => $list->getListId()));
+        return $listItemss;
     }
 
     public function findRecordsByListId($listId) {
-        $listXrefs = $this->getRepo()->findBy(array('ListId' => $listId));
-        return $listXrefs;
+        $listItemss = $this->getRepo()->findBy(array('ListId' => $listId));
+        return $listItemss;
     }
 
     /**

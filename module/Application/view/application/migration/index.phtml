@@ -1,0 +1,8 @@
+<div class="row">
+    <h3>Migration Controller</h3>
+    <ul>
+<?php foreach($this->actions as $action) { ?>
+    <li><a href="/migration/<?= $action; ?>"><?= ucfirst($action); ?></a></li>
+<?php } ?>
+    </ul>
+</div>
