@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      "paper"    = "Papers"
  * })
  */
-class ListItems
+class ListItems implements ListInterface
 {
     /**
      * @var integer
@@ -139,6 +139,8 @@ class ListItems
     }
 
     /**
+     * ListInterface alias to get primary Id
+     *
      * @return int
      */
     public function getId() {

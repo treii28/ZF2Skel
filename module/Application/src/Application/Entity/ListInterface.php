@@ -1,0 +1,18 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: scottw
+ * Date: 1/13/15
+ * Time: 1:09 PM
+ */
+
+namespace Application\Entity;
+
+
+interface ListInterface {
+
+    /**
+     * @return integer
+     */
+    public function getId();
+}

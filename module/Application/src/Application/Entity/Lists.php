@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="Lists")
  * @ORM\Entity
  */
-class Lists
+class Lists implements ListInterface
 {
     /**
      * @var integer
@@ -39,9 +39,6 @@ class Lists
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="Application\Entity\ListItems", mappedBy="ListId", cascade={"all"})
-     * @ORM\OrderBy({
-     *     "MemberId"="ASC"
-     * })
      */
     private $Listitems;
 
@@ -124,16 +121,24 @@ class Lists
     }
 
     /**
+     * ListInterface alias method for primary Id
+     * @return int
+     */
+    public function getId() {
+        return $this->getListId();
+    }
+
+    /**
      * Add Listitem
      *
-     * @param \Application\Entity\ListItems|\Application\Entity\Lists $listitem
+     * @param \Application\Entity\ListItems $listitem
      * @return \Application\Entity\Lists
      * @throws \Exception on invalid listitem type
      */
-    public function addListitem($listitem)
+    public function addListitem(\Application\Entity\ListItems $listitem)
     {
-        if(!(($listitem instanceof ListItems) || $listitem instanceof Lists)) {
-            throw new \Exception(__METHOD__ . "can only add instances of Lists or inherited from ListItems");
+        if(!($listitem instanceof ListItems) ) {
+            throw new \Exception(__METHOD__ . "can only add instances of ListItems");
         }
         $this->Listitems->add($listitem);
 
@@ -164,7 +169,7 @@ class Lists
      * Set type
      *
      * @param \Application\Entity\Types $type
-     * @return Lists
+     * @return ListsElement
      */
     public function setType(\Application\Entity\Types $type = null)
     {

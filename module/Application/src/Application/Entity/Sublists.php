@@ -8,11 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Sublists
  *
  * @ORM\Entity
- * @ORM\Table(name="Sublists", uniqueConstraints={
- *      @ORM\UniqueConstraint(name="UniqueSublistId_idx", columns={"SublistId"}),
- *      @ORM\UniqueConstraint(name="UniqueReflistId_idx", columns={"ReflistId"})
- *   }
- * )
+ * @ORM\Table(name="Sublists")
  */
 class Sublists extends ListItems
 {
@@ -20,15 +16,6 @@ class Sublists extends ListItems
      * @var \Application\Entity\Lists $sublist
      */
     protected $sublist;
-    /**
-     * legacy unique identifier
-     *
-     * @var integer
-     *
-     * @ORM\Column(name="SublistId", type="integer", nullable=true)
-     */
-
-    protected $SublistId;
 
     /**
      * @var string
@@ -40,27 +27,6 @@ class Sublists extends ListItems
     public function __construct() {
         parent::__construct();
         $this->setEntityName(__CLASS__);
-    }
-
-    /**
-     * Get SublistId
-     *
-     * @return integer
-     */
-    public function getSublistId()
-    {
-        return $this->SublistId;
-    }
-
-    /**
-     * @param integer $sublistId
-     * @return ListItems
-     */
-    public function setSublistId($sublistId)
-    {
-        $this->SublistId = $sublistId;
-
-        return $this;
     }
 
     /**
@@ -93,12 +59,16 @@ class Sublists extends ListItems
     /**
      * set Sublist
      *
-     * @param \Application\Entity\Lists $sublist
+     * @param \Application\Entity\Lists|null $sublist
      * @return Sublists
      */
-    public function setList(\Application\Entity\Lists $sublist)
+    public function setSubList(\Application\Entity\Lists $sublist = null)
     {
-        $this->setSublistId($sublist->getListId());
+        if(is_null($sublist)) {
+            if(isset($this->ReflistId) && (intval($this->ReflistId) > 0)) {
+
+            }
+        }
         $this->sublist = $sublist;
 
         return $this;
@@ -107,7 +77,7 @@ class Sublists extends ListItems
     /**
      * @return \Application\Entity\Lists|null
      */
-    public function getList()
+    public function getSubList()
     {
         return $this->sublist;
     }

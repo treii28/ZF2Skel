@@ -5,7 +5,6 @@ namespace Application\Controller;
 use Zend\View\Model\ViewModel;
 use Application\Mapper\ListMapper;
 use Application\Mapper\TypeMapper;
-use Application\Mapper\ListXrefMapper;
 
 class ListController extends AbstractController
 {
@@ -13,35 +12,12 @@ class ListController extends AbstractController
      * @var \Doctrine\ORM\EntityManager $entity_manager
      */
     protected $entity_manager;
-    /**
-     * @var ListMapper $_Mapper
-     */
-    protected $_Mapper;
 
     public function indexAction()
     {
-        $em = $this->getMapper()->getEntityManager();
-        //$Type = $this->getTypeMapper()->findRecordById(1);
-        $List = $this->getMapper()->findRecordById(1);
-        /*
-        $Type = new \Application\Entity\Types();
-        $Type->setTypeName('MaterialCollection');
-        $em->persist($Type);
-        $em->flush();
-        $List = new \Application\Entity\Lists();
-        $List->setType($Type);
-        $List->setListName('My Materials');
-        $em->persist($List);
-        $em->flush();
-        */
-
-        //$ListItem = new \Application\Entity\ListItems();
-        $PaperItem = new \Application\Entity\Papers();
-        $PaperItem->setList($List);
-        $PaperItem->setMemberId(1);
-        $PaperItem->setPaperName('Cotton');
-        $em->persist($PaperItem);
-        $em->flush();
+        $em = $this->getEntityManager();
+        $lm = $this->getMapper();
+        $tm = $this->getTypeMapper();
         return new ViewModel();
     }
 
@@ -67,41 +43,10 @@ class ListController extends AbstractController
     }
 
     /**
-     * @param null|string $mapperName
-     * @return ListMapper|\Application\Mapper\AbstractMapper
-     * @throws \Exception on mapper class not found
-     */
-    protected function getMapper($mapperName=null) {
-        if(empty($mapperName)) {
-            if(!$this->_Mapper) {
-                $this->_Mapper = $this->getServiceLocator()->get('ListMapper');
-            }
-            return $this->_Mapper;
-        } elseif(class_exists('Application\\Mapper\\'.$mapperName)) {
-            return $this->getServiceLocator()->get($mapperName);
-        } else {
-            throw new \Exception(__METHOD__." mapper not found for '$mapperName'");
-        }
-    }
-
-    /**
      * @return TypeMapper
      */
     protected function getTypeMapper() {
-        return $this->getServiceLocator()->get('TypeMapper');
-    }
-    /**
-     * @param integer|string $id
-     * @return ListXrefMapper
-     * @throws \Exception on Xref mapper not find
-     */
-    protected function getXrefMapper($id) {
-        $typeMapper = $this->getMapper()->getListTypeName($id) . 'Mapper';
-        if(class_exists('\\Application\\Mapper\\Lists\\' . $typeMapper)) {
-            return $this->getServiceLocator()->get($typeMapper);
-        } else {
-            throw new \Exception(__METHOD__." type Xref mapper not found");
-        }
+        return $this->getMapper('Type');
     }
 
     /**

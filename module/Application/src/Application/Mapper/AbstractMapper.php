@@ -8,87 +8,152 @@
 
 namespace Application\Mapper;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\QueryBuilder;
+use Zend\ServiceManager\ServiceLocatorAwareInterface as ZendServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface      as ZendServiceLocatorInterface;
 
-class AbstractMapper implements ServiceLocatorAwareInterface
+use Doctrine\ORM\EntityRepository                    as DoctrineEntityRepository;
+use Doctrine\ORM\EntityManager                       as DoctrineEntityManager;
+use Doctrine\ORM\QueryBuilder                        as DoctrineQueryBuilder;
+
+abstract class AbstractMapper implements ZendServiceLocatorAwareInterface
 {
+
     const ENTITY_NAME = '';
 
-    protected $service_manager;
-    /**
-     * @var \Doctrine\ORM\EntityManager; $entity_manager
-     */
-    private $entity_manager;
-    /**
-     * @var \Doctrine\ORM\QueryBuilder $query_builder
-     */
-    private $query_builder;
+    // <editor-fold desc="Zend Framework 2 ServiceLocateAwareInterface properties">
 
     /**
-     * @var \Doctrine\ORM\EntityRespository[] $repository
+     * @var ZendServiceLocatorInterface $service_manager
      */
-    private $repositories = array();
+    protected static $service_manager;
+
+    // </editor-fold>
+
+    // <editor-fold desc="Doctrine 2 ORM service handles">
+
+    /**
+     * @var DoctrineEntityManager $entity_manager
+     */
+    private static $entity_manager;
+
+    /**
+     * @var DoctrineQueryBuilder $query_builder
+     */
+    private static $query_builder;
+
+    /**
+     * @var AbstractMapper[] $mappers
+     */
+    private static $mappers = array();
+
+    /**
+     * @var DoctrineEntityRepository[] $repositories
+     */
+    private static $repositories = array();
+
+    // </editor-fold>
 
     public function __construct() { }
 
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->service_manager = $serviceLocator;
-    }
+    // <editor-fold desc="Zend Framework 2 ServiceLocateAwareInterface methods">
 
-    public function getServiceLocator()
+    /**
+     * @param ZendServiceLocatorInterface $serviceLocator
+     */
+    public function setServiceLocator(ZendServiceLocatorInterface $serviceLocator)
     {
-        return $this->service_manager;
-    }
-
-    public function findRecordById($id)
-    {
-        return $this->getEntityManager()->find($this->_getEntityName(),$id);
+        self::$service_manager = $serviceLocator;
     }
 
     /**
-     * @return \Doctrine\ORM\EntityManager
+     * @return ZendServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return self::$service_manager;
+    }
+
+    // </editor-fold>
+
+    // <editor-fold desc="Doctrine 2 ORM service accessors">
+
+    /**
+     * @return DoctrineEntityManager
      */
     public function getEntityManager()
     {
-        if (!($this->entity_manager instanceof EntityManager)) {
-            $this->entity_manager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+        if (!(self::$entity_manager instanceof EntityManager)) {
+            self::$entity_manager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
         }
 
-        return $this->entity_manager;
+        return self::$entity_manager;
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return DoctrineQueryBuilder
      */
     public function getQueryBuilder()
     {
-        if (!($this->query_builder instanceof QueryBuilder)) {
-            $this->query_builder = $this->getEntityManager()->createQueryBuilder();
+        if (!(self::$query_builder instanceof QueryBuilder)) {
+            self::$query_builder = $this->getEntityManager()->createQueryBuilder();
         }
 
-        return $this->query_builder;
+        return self::$query_builder;
     }
 
-    public function findAll() {
-        return $this->getEntityManager()->getRepository($this->_getEntityName())->findAll();
+    /**
+     * @param string $entityName
+     * @return DoctrineEntityRepository
+     * @throws \Exception on Entity not found
+     */
+    public function getRepo($entityName = null) {
+        if(is_null($entityName)) {
+            $entityName = $this->_getEntityName();
+        }
+        if(!(class_exists($entityName))) {
+            throw new \Exception(__METHOD__ . " unable to find repository, class '$entityName' not found");
+        }
+        if(!(isset(self::$repositories[$entityName]) && (self::$repositories[$entityName] instanceof EntityRepository))) {
+            self::$repositories[$entityName] = $this->getEntityManager()->getRepository($entityName);
+        }
+        return self::$repositories[$entityName];
     }
 
-    public function persistInstance($instance) {
-        $this->getEntityManager()->persist($instance);
-        return $this->getEntityManager()->flush();
+    /**
+     * @param string|null $mapperName
+     * @return AbstractMapper
+     * @throws \Exception on Mapper not found
+     */
+    public function getMapper($mapperName = null) {
+        if(empty($mapperName)) {
+            $mapperName = get_class($this); // parent will clean up mapperName
+        }
+
+        // normalize the mapperName to use for finding the mapper and assigning the cache key
+        // make sure 'Mapper' is on the end of the name
+        if(!(preg_match('/Mapper$/', $mapperName))) {
+            $mapperName .= 'Mapper';
+        }
+        // remove any namespace prefix
+        if(preg_match('/^(\\\\)?.*\\\\/', $mapperName)) {
+            $mapperName = preg_replace('/^(\\\\)?.*\\\\/', '', $mapperName);
+        }
+
+        if(!(isset(self::$mappers[$mapperName]) && (self::$mappers[$mapperName] instanceof AbstractMapper))) {
+            $mapper = $this->getServiceLocator()->get($mapperName);
+            if(!($mapper instanceof \Application\Mapper\AbstractMapper)) {
+                throw new \Exception(__METHOD__." mapper '$mapperName' not found");
+            }
+            self::$mappers[$mapperName] = $mapper;
+        }
+        return self::$mappers[$mapperName];
     }
 
-    public function removeInstance($instance) {
-        $this->getEntityManager()->remove($instance);
-        return $this->getEntityManager()->flush();
-    }
+    // </editor-fold>
 
+    //<editor-fold desc="Helper Functions">
     protected function _getBaseName() {
+
         preg_match('/(\w+)Mapper$/', get_class($this), $m);
         return $m[1];
     }
@@ -99,7 +164,7 @@ class AbstractMapper implements ServiceLocatorAwareInterface
      * @return string
      */
     protected function _getEntityName() {
-        $cclass = '\\'.get_called_class();
+        $cclass = '\\'.get_class($this);
         $centity = (defined($cclass::ENTITY_NAME)) ? $cclass::ENTITY_NAME : '';
         if(!empty($centity) && class_exists($centity)) {
             return $centity;
@@ -112,21 +177,29 @@ class AbstractMapper implements ServiceLocatorAwareInterface
         }
     }
 
-    /**
-     * @param null|string $entity_name
-     * @return EntityRepository|\Doctrine\ORM\EntityRespository
-     * @throws \Exception on Entity not found
-     */
-    public function getRepo($entity_name = null) {
-        if(is_null($entity_name)) {
-            $entity_name = $this->_getEntityName();
-        }
-        if(!(class_exists($entity_name))) {
-            throw new \Exception(__METHOD__ . " unable to find repository, class '$entity_name' not found");
-        }
-        if(!($this->repositories[$entity_name] instanceof EntityRepository)) {
-            $this->repositories[$entity_name] = $this->getEntityManager()->getRepository($entity_name);
-        }
-        return $this->repositories[$entity_name];
+    // </editor-fold>
+
+    // <editor-fold desc="Doctrine 2 ORM Helper functions">
+
+    public function findRecordById($id)
+    {
+        return $this->getEntityManager()->find($this->_getEntityName(),$id);
     }
+
+    public function findAll() {
+        return $this->getRepo()->findAll();
+    }
+
+    public function persistInstance($instance) {
+        $this->getEntityManager()->persist($instance);
+        return $this->getEntityManager()->flush();
+    }
+
+    public function removeInstance($instance) {
+        $this->getEntityManager()->remove($instance);
+        return $this->getEntityManager()->flush();
+    }
+
+    // </editor-fold>
+
 }

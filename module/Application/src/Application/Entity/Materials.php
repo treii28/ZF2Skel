@@ -9,8 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="Materials", uniqueConstraints={
- *      @ORM\UniqueConstraint(name="UniqueMaterialId_idx", columns={"MaterialId"}),
- *      @ORM\UniqueConstraint(name="UniqueMaterialName_idx", columns={"MaterialName"})
+ *      @ORM\UniqueConstraint(name="UniqueMaterialNameId_idx", columns={"MaterialName","MaterialId"})
  *   }
  * )
  */

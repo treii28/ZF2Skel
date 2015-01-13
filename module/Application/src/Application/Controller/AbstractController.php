@@ -8,22 +8,21 @@
 
 namespace Application\Controller;
 
-use Zend\View\Model\ViewModel;
-
+//use Zend\View\Model\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
 
 class AbstractController  extends AbstractActionController
 {
     const MAPPER_NAME = '';
-    /**
-     * @var \Doctrine\ORM\EntityManager $entity_manager
-     */
-    protected $entity_manager;
 
     /**
      * @var \Application\Mapper\AbstractMapper $_Mapper
      */
-    protected $_Mapper;
+    protected $_defMapper;
+
+    public function __construct() {
+        //$this->getDefMapper();
+    }
 
     protected function _getBaseName() {
         preg_match('/(\w+)Controller$/', get_class($this), $m);
@@ -48,11 +47,56 @@ class AbstractController  extends AbstractActionController
     /**
      * @return \Application\Mapper\AbstractMapper
      */
-    protected function getMapper() {
-        if(!$this->_Mapper) {
-            $this->_Mapper = $this->getServiceLocator()->get($this->_getBaseName()."Mapper");
+    protected function getDefMapper() {
+        if(!$this->_defMapper) {
+            $this->_defMapper = $this->getServiceLocator()->get($this->_getBaseName()."Mapper");
         }
-        return $this->_Mapper;
+        return $this->_defMapper;
+    }
+
+    /**
+     * local alias wrapper to AbstractMapper->getMapper($mapperName)
+     *
+     * @param null|string $mapperName
+     * @returns \Application\Mapper\AbstractMapper
+     * @throws \Exception
+     */
+    public function getMapper($mapperName = null) {
+        if(empty($mapperName)) {
+            return $this->getDefMapper();
+        } else {
+            return $this->getDefMapper()->getMapper($mapperName);
+        }
+    }
+
+    /**
+     * local alias wrapper to AbstractMapper->getEntityManager()
+     *
+     * @return \Doctrine\ORM\EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->getDefMapper()->getEntityManager();
+    }
+
+    /**
+     * local alias wrapper to AbstractMapper->getRepo()
+     *
+     * @param null|string $repoName
+     * @return \Doctrine\ORM\EntityRepository
+     * @throws \Exception
+     */
+    public function getRepo($repoName = null) {
+        return $this->getDefMapper()->getRepo($repoName);
+    }
+
+    /**
+     * local alias wrapper to AbstractMapper-getQueryBuilder()
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getQueryBuilder() {
+        return $this->getDefMapper()->getQueryBuilder();
     }
 
     /**
@@ -71,17 +115,5 @@ class AbstractController  extends AbstractActionController
             }
         }
         return $actionList;
-    }
-
-    /**
-     * @return \Doctrine\ORM\EntityManager
-     */
-    public function getEntityManager()
-    {
-        if (!($this->entity_manager instanceof EntityManager)) {
-            $this->entity_manager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
-        }
-
-        return $this->entity_manager;
     }
 }

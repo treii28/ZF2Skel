@@ -139,19 +139,13 @@ class ListMapper extends AbstractMapper {
      */
     public function getTypeMapper()
     {
-        if(!($this->_typeMapper instanceof TypeMapper)) {
-            $this->_typeMapper = $this->getServiceLocator()->get('TypeMapper');
-        }
-        return $this->_typeMapper;
+        return $this->getMapper('Types');
     }
 
     /**
      * @return ListItemsMapper
      */
     public function getListItemsMapper() {
-        if(!($this->_listitemsMapper instanceof ListItemsMapper)) {
-            $this->_listitemsMapper = $this->getServiceLocator()->get('ListItemsMapper');
-        }
-        return $this->_listitemsMapper;
+        return $this->getMapper('ListItems');
     }
 }
