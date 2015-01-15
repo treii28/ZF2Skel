@@ -61,9 +61,16 @@ class Subitems extends ListItems
      *
      * @param \Application\Entity\ListItems $subitem
      * @return Subitems
+     * @throws \Exception on invalid subItem
      */
     public function setSubitem(\Application\Entity\ListItems $subitem)
     {
+        if(intval($subitem->getId()) > 0) {
+            $this->setRefitemId($subitem->getId());
+        } else {
+            // this may occur if the subitem is not persisted (not yet stored in db with the doctrine entity manager)
+            throw new \Exception(__METHOD__ . " subitem does not appear to contain a proper id");
+        }
         $this->subitem = $subitem;
 
         return $this;

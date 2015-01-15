@@ -108,7 +108,7 @@ abstract class AbstractMapper implements ZendServiceLocatorAwareInterface
      */
     public function getRepo($entityName = null) {
         if(is_null($entityName)) {
-            $entityName = $this->_getEntityName();
+            $entityName = $this->getEntityName();
         }
         if(!(class_exists($entityName))) {
             throw new \Exception(__METHOD__ . " unable to find repository, class '$entityName' not found");
@@ -163,7 +163,7 @@ abstract class AbstractMapper implements ZendServiceLocatorAwareInterface
      *
      * @return string
      */
-    protected function _getEntityName() {
+    protected function getEntityName() {
         $cclass = '\\'.get_class($this);
         $centity = (defined($cclass::ENTITY_NAME)) ? $cclass::ENTITY_NAME : '';
         if(!empty($centity) && class_exists($centity)) {
@@ -183,7 +183,7 @@ abstract class AbstractMapper implements ZendServiceLocatorAwareInterface
 
     public function findRecordById($id)
     {
-        return $this->getEntityManager()->find($this->_getEntityName(),$id);
+        return $this->getEntityManager()->find($this->getEntityName(),$id);
     }
 
     public function findAll() {

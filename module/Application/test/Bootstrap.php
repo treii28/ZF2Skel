@@ -19,17 +19,31 @@ chdir(__DIR__);
 
 class Bootstrap
 {
+    /**
+     * @var ServiceManager $serviceManager
+     */
     protected static $serviceManager;
+    /**
+     * @var array $config
+     */
     protected static $config;
+
+    /**
+     * @var
+     */
     protected static $bootstrap;
 
+    /**
+     *
+     */
     public static function init()
     {
         // Load the user-defined test configuration file, if it exists; otherwise, load
-        if (is_readable(__DIR__ . '/TestConfig.php')) {
-            $testConfig = include __DIR__ . '/TestConfig.php';
+        $testConfig = realpath(__DIR__) . '/TestConfig.php';
+        if (is_readable($testConfig)) {
+            $testConfig = include $testConfig;
         } else {
-            $testConfig = include __DIR__ . '/TestConfig.php.dist';
+            $testConfig = include $testConfig . '.dist';
         }
 
         $zf2ModulePaths = array();
@@ -65,16 +79,25 @@ class Bootstrap
         static::$config = $config;
     }
 
+    /**
+     * @return ServiceManager
+     */
     public static function getServiceManager()
     {
         return static::$serviceManager;
     }
 
+    /**
+     * @return array
+     */
     public static function getConfig()
     {
         return static::$config;
     }
 
+    /**
+     *
+     */
     protected static function initAutoloader()
     {
         $vendorPath = static::findParentPath('vendor');
@@ -102,6 +125,10 @@ class Bootstrap
         ));
     }
 
+    /**
+     * @param $path
+     * @return bool|string
+     */
     protected static function findParentPath($path)
     {
         $dir = __DIR__;

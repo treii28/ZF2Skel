@@ -13,7 +13,7 @@ namespace Application\Mapper;
 //use Application\Entity\ListItems;
 //use Application\Entity\Types;
 
-class ListItemsMapper extends AbstractMapper {
+class ListItemMapper extends AbstractMapper {
 
     const ENTITY_NAME = 'Application\\Entity\\ListItems';
 
@@ -28,33 +28,17 @@ class ListItemsMapper extends AbstractMapper {
         parent::__construct();
     }
 
-    protected function _getEntityName() {
-        /*
-        $cclass = get_called_class();
-        $typeName = $cclass::TYPE_NAME;
-        $entityName = (class_exists('Application\\Entity\\Lists\\'.$typeName)) ? 'Application\\Entity\\Lists\\'.$typeName : 'Application\\Entity\\ListItems';
-        return $entityName;
-        */
+    protected function getEntityName() {
         return self::ENTITY_NAME;
     }
 
-
     /**
-     * @param \Application\Entity\ListItems $listRef
+     * @param \Application\Entity\ListItems $listItem
      * @return string
      */
-    public function getListRefEntityName($listRef) {
-        $refEntity = 'Application\\Entity\\' . $listRef->getList()->getType()->getEntityName();
-        return $refEntity;
-    }
-
-    /**
-     * @param \Application\Entity\ListItems $listRef
-     * @return \Doctrine\ORM\EntityRepository
-     */
-    public function getListRefRepo($listRef) {
-        $refRepo = $this->getEntityManager()->getRepository($this->getListRefEntityName($listRef));
-        return $refRepo;
+    public function getListItemDiscriminatorValue(\Application\Entity\ListItems $listItem) {
+        $meta = $this->getEntityManager()->getMetadataFactory()->getMetadataFor(get_class($listItem));
+        return $meta->discriminatorValue;
     }
 
     public function findRecordsByListName($listName) {
@@ -73,9 +57,6 @@ class ListItemsMapper extends AbstractMapper {
      */
     public function getListMapper()
     {
-        if(!($this->_listMapper instanceof ListMapper)) {
-            $this->_listMapper = $this->getServiceLocator()->get('ListMapper');
-        }
-        return $this->_listMapper;
+        return $this->getMapper('ListMapper');
     }
 }

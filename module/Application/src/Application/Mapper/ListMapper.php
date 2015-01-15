@@ -21,7 +21,7 @@ class ListMapper extends AbstractMapper {
     private $_typeMapper;
 
     /**
-     * @var ListItemsMapper $_listitemsMapper
+     * @var ListItemMapper $_listitemsMapper
      */
     private $_listitemsMapper;
 
@@ -143,7 +143,7 @@ class ListMapper extends AbstractMapper {
     }
 
     /**
-     * @return ListItemsMapper
+     * @return ListItemMapper
      */
     public function getListItemsMapper() {
         return $this->getMapper('ListItems');

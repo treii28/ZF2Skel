@@ -140,6 +140,7 @@ class Lists implements ListInterface
         if(!($listitem instanceof ListItems) ) {
             throw new \Exception(__METHOD__ . "can only add instances of ListItems");
         }
+        $listitem->setList($this);
         $this->Listitems->add($listitem);
 
         return $this;

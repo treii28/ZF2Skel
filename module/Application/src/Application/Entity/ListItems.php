@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      "item"     = "ListItems",
  *      "sublist"  = "Sublists",
  *      "subitem"  = "Subitems",
- *      "value"    = "Values",
+ *      "val"      = "Vals",
  *      "material" = "Materials",
  *      "printer"  = "Printers",
  *      "paper"    = "Papers"

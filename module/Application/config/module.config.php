@@ -183,7 +183,7 @@ return array(
         'invokables' => array(
             'AddressMapper'   => 'Application\Mapper\AddressMapper',
             'ListMapper'      => 'Application\Mapper\ListMapper',
-            'ListXrefMapper'  => 'Application\Mapper\ListXrefMapper',
+            'ListItemMapper'  => 'Application\Mapper\ListItemMapper',
             'OrderItemMapper' => 'Application\Mapper\OrderItemMapper',
             'OrderMapper'     => 'Application\Mapper\OrderMapper',
             'ProductMapper'   => 'Application\Mapper\ProductMapper',

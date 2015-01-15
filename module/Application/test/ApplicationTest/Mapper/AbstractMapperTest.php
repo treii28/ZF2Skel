@@ -8,18 +8,23 @@
 
 namespace ApplicationTest\Mapper;
 
+require_once(realpath(__DIR__ . "/../") . "/TestingAbstract.php");
+
+use ApplicationTest\TestingAbstract;
 use Application\Mapper\AbstractMapper;
-use ApplicationTest\Bootstrap;
-use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
-use PHPUnit_Framework_TestCase;
 
 
-class AbstractMapperTest extends \PHPUnit_Framework_TestCase {
+class AbstractMapperTest extends TestingAbstract {
+    protected function setUp() {
+        parent::setUp();
+    }
+    protected function tearDown() {
+        parent::tearDown();
+    }
 
+    public function testTestMapper() {
+        $this->assertTrue(true);
+    }
 }
 
 class TestMapper extends AbstractMapper {

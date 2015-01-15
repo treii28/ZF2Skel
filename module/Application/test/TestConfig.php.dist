@@ -1,6 +1,9 @@
 <?php
 return array(
     'modules' => array(
+        'ZendDeveloperTools',
+        'DoctrineModule',
+        'DoctrineORMModule',
         'Application',
     ),
     'module_listener_options' => array(
