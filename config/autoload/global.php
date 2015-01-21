@@ -11,7 +11,7 @@
  * file.
  */
 
-return array(
+$glocfg = array(
     'db' => array(
         //this is for primary adapter....
         'driver'   => 'Pdo_Mysql',
@@ -22,14 +22,14 @@ return array(
         'adapters' => array(
             /*
             'joomla' => array(
-                'driver'   => 'Pdo_Mysql',
+                'driverreturn'   => 'Pdo_Mysql',
                 'database' => 'joomla_finaoonline_com',
                 'host'     => 'localhost',
             ),
             */
             'joomla' => array(
                 'driver'   => 'Pdo_Sqlite',
-                'database' => 'data/sql/finaodb.sqlite',
+                'database' => realpath(dirname(__DIR__).'/../data/sql/') . '/finaodb.sqlite',
             )
         )
     ),
@@ -47,3 +47,5 @@ return array(
         )
     )
 );
+
+return $glocfg;

@@ -1,5 +1,5 @@
 <?php
-return array(
+$appcfg = array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
         'ZendDeveloperTools',
@@ -15,15 +15,15 @@ return array(
         // namespace, the value of that key the specific path to that module's
         // Module class.
         'module_paths' => array(
-            './module',
-            './vendor',
+            realpath(__DIR__ . '/../module'),
+            realpath(__DIR__ . '/../vendor'),
         ),
 
         // An array of paths from which to glob configuration files after
         // modules are loaded. These effectively override configuration
         // provided by modules themselves. Paths may use GLOB_BRACE notation.
         'config_glob_paths' => array(
-            'config/autoload/{,*.}{global,local}.php',
+            realpath(__DIR__ . '/autoload') . '/{,*.}{global,local}.php',
         ),
 
         // Whether or not to enable a configuration cache.
@@ -65,3 +65,5 @@ return array(
    // Should be compatible with Zend\ServiceManager\Config.
    // 'service_manager' => array(),
 );
+
+return $appcfg;

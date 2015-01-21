@@ -11,7 +11,7 @@
  * credentials from accidentally being committed into version control.
  */
 
-return array(
+$loccfg = array(
     'db' => array(
         // for primary db adapter that called
         // by $sm->get('Zend\Db\Adapter\Adapter')
@@ -39,3 +39,5 @@ return array(
     //    ...
     // )
 );
+
+return $loccfg;

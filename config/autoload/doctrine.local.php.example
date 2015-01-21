@@ -1,5 +1,5 @@
 <?php
-return array(
+$docloc = array(
     'doctrine' => array(
         'connection' => array(
             'orm_default' => array(
@@ -15,3 +15,5 @@ return array(
         )
     )
 );
+
+return $docloc;

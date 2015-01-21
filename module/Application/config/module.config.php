@@ -10,13 +10,16 @@
 // check for an environmental variable to use alternate doctrine driver (generate entities uses xml_config)
 $doctrine_driver = ((isset($_SERVER['DOCTRINE_DRIVER'])) ? $_SERVER['DOCTRINE_DRIVER'] : 'application_entities');
 
-return array(
+$app_root = dirname(__DIR__);
+$proj_root = realpath(preg_replace('/\/module\/Application\/?$/', '', $app_root));
+
+$modcfg = array(
     'doctrine' => array(
         'driver' => array(
             'application_entities' => array(
                 'class' =>'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
-                'paths' => array(realpath(__DIR__ . '/../src/Application/Entity'))
+                'paths' => array(realpath($app_root . '/src/Application/Entity'))
             ),
             'xml_config' => array(
                 'class' =>'Doctrine\ORM\Mapping\Driver\XmlDriver',
@@ -198,7 +201,7 @@ return array(
         'translation_file_patterns' => array(
             array(
                 'type'     => 'gettext',
-                'base_dir' => __DIR__ . '/../language',
+                'base_dir' => $app_root . '/language',
                 'pattern'  => '%s.mo',
             ),
         ),
@@ -221,20 +224,31 @@ return array(
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
         'template_map' => array(
-            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
-            'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
-            'error/404'               => __DIR__ . '/../view/error/404.phtml',
-            'error/index'             => __DIR__ . '/../view/error/index.phtml',
+            'layout/layout'           => $app_root . '/view/layout/layout.phtml',
+            'application/index/index' => $app_root . '/view/application/index/index.phtml',
+            'error/404'               => $app_root . '/view/error/404.phtml',
+            'error/index'             => $app_root . '/view/error/index.phtml',
         ),
         'template_path_stack' => array(
-            __DIR__ . '/../view',
+            $app_root . '/view',
         ),
     ),
     // Placeholder for console routes
     'console' => array(
         'router' => array(
             'routes' => array(
+                'migration' => array(
+                    'options' => array(
+                        'route'    => 'migration [materials|collections|colorrefs]:mode [--verbose|-v]',
+                        'defaults' => array(
+                            'controller' => 'MigrationController',
+                            'action'     => 'cli'
+                        )
+                    )
+                )
             ),
         ),
     ),
 );
+
+return $modcfg;
