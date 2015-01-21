@@ -190,11 +190,7 @@ return array(
             'TypeMapper'      => 'Application\Mapper\TypeMapper',
             'UserMapper'      => 'Application\Mapper\UserMapper',
 
-            'MaterialCollectionMapper' => 'Application\Mapper\Lists\MaterialCollectionMapper',
-            'SelectPremiumLeather'     => 'Application\Mapper\Lists\SelectPremiumLeatherMapper',
-            'SubSelectPremiumLeather'  => 'Application\Mapper\Lists\SubSelectPremiumLeatherMapper',
-            'PrinterCollectionMapper'  => 'Application\Mapper\Lists\PrinterCollectionMapper',
-            'PaperCollectionMapper'    => 'Application\Mapper\Lists\PaperCollectionMapper',
+            'MigrationMapper' => 'Application\Mapper\MigrationMapper',
         )
     ),
     'translator' => array(

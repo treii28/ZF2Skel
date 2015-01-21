@@ -2,54 +2,83 @@
 /**
  * Created by PhpStorm.
  * User: scottw
- * Date: 1/13/15
- * Time: 3:03 PM
+ * Date: 12/18/14
+ * Time: 3:42 PM
  */
 
 namespace Application;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\QueryBuilder;
+use Zend\ServiceManager\ServiceLocatorAwareInterface as ZendServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface      as ZendServiceLocatorInterface;
 
+use Doctrine\ORM\EntityRepository                    as DoctrineEntityRepository;
+use Doctrine\ORM\EntityManager                       as DoctrineEntityManager;
+use Doctrine\ORM\QueryBuilder                        as DoctrineQueryBuilder;
 
-class ServiceAbstract implements ServiceLocatorAwareInterface {
-    protected static $service_manager;
+abstract class ServiceAbstract implements ZendServiceLocatorAwareInterface
+{
+
+    const ENTITY_NAME = '';
+
+    // <editor-fold desc="Zend Framework 2 ServiceLocateAwareInterface properties">
+
     /**
-     * @var \Doctrine\ORM\EntityManager; $entity_manager
+     * @var ZendServiceLocatorInterface $service_manager
+     */
+    protected static $service_manager;
+
+    // </editor-fold>
+
+    public function __construct() { }
+
+    // <editor-fold desc="Doctrine 2 ORM service handles">
+
+    /**
+     * @var DoctrineEntityManager $entity_manager
      */
     private static $entity_manager;
+
     /**
-     * @var \Doctrine\ORM\QueryBuilder $query_builder
+     * @var DoctrineQueryBuilder $query_builder
      */
     private static $query_builder;
 
     /**
-     * @var AbstractMapper[] $repository
+     * @var AbstractMapper[] $mappers
      */
     private static $mappers = array();
 
     /**
-     * @var \Doctrine\ORM\EntityRespository[] $repository
+     * @var DoctrineEntityRepository[] $repositories
      */
     private static $repositories = array();
 
-    public function __construct() { }
+    // </editor-fold>
 
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    // <editor-fold desc="Zend Framework 2 ServiceLocateAwareInterface methods">
+
+    /**
+     * @param ZendServiceLocatorInterface $serviceLocator
+     */
+    public function setServiceLocator(ZendServiceLocatorInterface $serviceLocator)
     {
         self::$service_manager = $serviceLocator;
     }
 
+    /**
+     * @return ZendServiceLocatorInterface
+     */
     public function getServiceLocator()
     {
         return self::$service_manager;
     }
 
+    // </editor-fold>
+
+    // <editor-fold desc="Doctrine 2 ORM service accessors">
+
     /**
-     * @return \Doctrine\ORM\EntityManager
+     * @return DoctrineEntityManager
      */
     public function getEntityManager()
     {
@@ -61,7 +90,7 @@ class ServiceAbstract implements ServiceLocatorAwareInterface {
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return DoctrineQueryBuilder
      */
     public function getQueryBuilder()
     {
@@ -74,7 +103,7 @@ class ServiceAbstract implements ServiceLocatorAwareInterface {
 
     /**
      * @param string $entityName
-     * @return EntityRepository|\Doctrine\ORM\EntityRepository
+     * @return DoctrineEntityRepository
      * @throws \Exception on Entity not found
      */
     public function getRepo($entityName) {
@@ -88,18 +117,12 @@ class ServiceAbstract implements ServiceLocatorAwareInterface {
     }
 
     /**
-     * @param string $mapperName
+     * @param string|null $mapperName
      * @return AbstractMapper
      * @throws \Exception on Mapper not found
      */
     public function getMapper($mapperName) {
-        if(empty($mapperName)) {
-            throw new \Exception(__METHOD__.' mapper name cannot be empty');
-        }
-
         // normalize the mapperName to use for finding the mapper and assigning the cache key
-        // remove any plural endings
-        preg_replace('/(e)?s$/', '', $mapperName);
         // make sure 'Mapper' is on the end of the name
         if(!(preg_match('/Mapper$/', $mapperName))) {
             $mapperName .= 'Mapper';
@@ -111,11 +134,44 @@ class ServiceAbstract implements ServiceLocatorAwareInterface {
 
         if(!(isset(self::$mappers[$mapperName]) && (self::$mappers[$mapperName] instanceof AbstractMapper))) {
             $mapper = $this->getServiceLocator()->get($mapperName);
-            if($mapper instanceof \Application\Mapper\AbstractMapper) {
+            if(!($mapper instanceof \Application\Mapper\AbstractMapper)) {
                 throw new \Exception(__METHOD__." mapper '$mapperName' not found");
             }
             self::$mappers[$mapperName] = $mapper;
         }
         return self::$mappers[$mapperName];
     }
+
+    // </editor-fold>
+
+    // <editor-fold desc="Doctrine 2 ORM Helper functions">
+
+    /**
+     * find a given record for a given entity
+     *
+     * @param integer, $id
+     * @param string $entityName
+     * @return null|object
+     */
+    public function findRecordById($id,$entityName)
+    {
+        return $this->getEntityManager()->find($this->getEntityName(),$id);
+    }
+
+    public function findAll($entityName) {
+        return $this->getRepo($entityName)->findAll();
+    }
+
+    public function persistInstance($instance) {
+        $this->getEntityManager()->persist($instance);
+        return $this->getEntityManager()->flush();
+    }
+
+    public function removeInstance($instance) {
+        $this->getEntityManager()->remove($instance);
+        return $this->getEntityManager()->flush();
+    }
+
+    // </editor-fold>
+
 }

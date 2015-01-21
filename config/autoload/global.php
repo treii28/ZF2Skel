@@ -18,12 +18,18 @@ return array(
         'database' => 'slim',
         'host'     => 'localhost',
 
-        //other adapter when it needed...
+        //other adapter when it needed... Pdo_Sqlite
         'adapters' => array(
+            /*
             'joomla' => array(
                 'driver'   => 'Pdo_Mysql',
                 'database' => 'joomla_finaoonline_com',
                 'host'     => 'localhost',
+            ),
+            */
+            'joomla' => array(
+                'driver'   => 'Pdo_Sqlite',
+                'database' => 'data/sql/finaodb.sqlite',
             )
         )
     ),
