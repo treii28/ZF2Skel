@@ -15,8 +15,10 @@ use Application\Entity\Tests;
 
 
 class TestsTest extends TestingAbstract {
+    private $entityRepository;
     protected function setup() {
         parent::setup();
+        $this->entityRepository = $this->entityManager->getRepository('\\Application\\Entity\\Tests');
     }
 
     public function testsTest() {

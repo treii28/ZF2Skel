@@ -146,6 +146,12 @@ class Lists implements ListInterface
         return $this;
     }
 
+    public function flushListitems() {
+        foreach($this->Listitems as $listItem) {
+            $this->removeListitem($listItem);
+        }
+    }
+
     /**
      * Remove Listitem
      *

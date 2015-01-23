@@ -34,6 +34,7 @@ class ListsTest extends TestingAbstract {
 
     protected function setUp() {
         parent::setUp();
+        $this->entityRepository = $this->entityManager->getRepository('\\Application\\Entity\\Tests');
         $this->initEntities();
     }
 
@@ -63,6 +64,8 @@ class ListsTest extends TestingAbstract {
     protected function removeEntities() {
         //$this->entityManager->remove($this->myListItem);
         //$this->entityManager->flush();
+        $itemsCount = $this->myList->getListitems()->count();
+        $this->myList->flushListitems();
 
         $this->entityManager->remove($this->myList);
         $this->entityManager->flush();
@@ -96,7 +99,7 @@ class ListsTest extends TestingAbstract {
         $myVal = new \Application\Entity\Vals();
         $this->assertInstanceOf('\\Application\\Entity\\Vals', $myVal);
         $myVal->setDescription("Test Value");
-        $myVal->setContent(12);
+        $myVal->setContent(9876);
 
         $myVal->setList($this->myList);
         $this->entityManager->persist($myVal);
