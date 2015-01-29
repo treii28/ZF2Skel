@@ -21,6 +21,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ListItems implements ListInterface
 {
+
+    // <editor-fold desc="Entity properties bound to db columns">
+
     /**
      * @var integer
      *
@@ -45,6 +48,22 @@ class ListItems implements ListInterface
     protected $EntityName;
 
     /**
+     * @var string $Comment
+     *
+     * @ORM\Column(name="Comment", type="string", length=128, nullable=true)
+     */
+    protected $Comment;
+
+    /**
+     * @var integer $priority;
+     *
+     * @ORM\Column(name="priority", type="integer", nullable=true)
+     */
+    protected $priority;
+
+    // </editor-fold desc="Entity properties bound to db columns">
+
+    /**
      * @var \Application\Entity\Lists
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Lists")
@@ -57,6 +76,8 @@ class ListItems implements ListInterface
     public function __construct() {
         $this->setEntityName(__CLASS__);
     }
+
+    // <editor-fold desc="Entity db properties accessors">
 
     /**
      * Set ListId
@@ -129,6 +150,56 @@ class ListItems implements ListInterface
     }
 
     /**
+     * Set Comment
+     *
+     * @param string|null $comment
+     * @return Materials
+     */
+    public function setComment($comment=null)
+    {
+        $this->Comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get Comment
+     *
+     * @return string|null
+     */
+    public function getComment()
+    {
+        return $this->Comment;
+    }
+
+    /**
+     * Set Priority (used in ordering list items)
+     *
+     * @param integer|null $priority
+     * @return Materials
+     */
+    public function setPriority($priority=null)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get Priority
+     *
+     * @return string
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    // </editor-fold desc="Entity db properties accessors">
+
+    // <editor-fold desc="Additional helper functions">
+
+    /**
      * clear the list associations for this item
      */
     public function clearList() {
@@ -154,4 +225,7 @@ class ListItems implements ListInterface
     public function getId() {
         return $this->getListItemId();
     }
+
+    // </editor-fold desc="Additional helper functions">
+
 }

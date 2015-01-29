@@ -39,6 +39,7 @@ class Lists implements ListInterface
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="Application\Entity\ListItems", mappedBy="ListId", cascade={"all"})
+     * @ORM\OrderBy({"priority" = "ASC"})
      */
     private $Listitems;
 
