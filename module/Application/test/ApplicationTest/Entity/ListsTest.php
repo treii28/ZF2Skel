@@ -55,24 +55,25 @@ class ListsTest extends TestingAbstract {
         $this->entityManager->persist($this->myList);
         $this->entityManager->flush();
 
-        //$this->myListItem = new ListItems();
-        //$this->myListItem->setList($this->myList);
-        //$this->entityManager->persist($this->myListItem);
-        //$this->entityManager->flush();
+        $this->myListItem = new ListItems();
+        $this->entityManager->persist($this->myListItem);
+        $this->entityManager->flush();
     }
 
     protected function removeEntities() {
-        //$this->entityManager->remove($this->myListItem);
-        //$this->entityManager->flush();
         $itemsCount = $this->myList->getListitems()->count();
-        $this->myList->flushListitems();
+        $this->myList->removeAllListitems();
+
+        $this->entityManager->flush(); // make sure all prior operations are complete
+
+        $this->entityManager->remove($this->myListItem);
+        $this->entityManager->flush();
 
         $this->entityManager->remove($this->myList);
         $this->entityManager->flush();
 
         $this->entityManager->remove($this->myType);
         $this->entityManager->flush();
-
     }
 
     /**

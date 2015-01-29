@@ -33,7 +33,7 @@ class ListItems implements ListInterface
     /**
      * @var integer
      *
-     * @ORM\Column(name="ListId", type="integer", nullable=false)
+     * @ORM\Column(name="ListId", type="integer", nullable=true)
      */
     protected $ListId;
 
@@ -49,7 +49,7 @@ class ListItems implements ListInterface
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Lists")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ListId", referencedColumnName="ListId")
+     *   @ORM\JoinColumn(name="ListId", referencedColumnName="ListId", onDelete="CASCADE")
      * })
      */
     protected $list;
@@ -126,6 +126,14 @@ class ListItems implements ListInterface
         $this->list = $list;
 
         return $this;
+    }
+
+    /**
+     * clear the list associations for this item
+     */
+    public function clearList() {
+        $this->ListId = null;
+        $this->list = null;
     }
 
     /**

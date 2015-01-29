@@ -75,7 +75,7 @@ class OrderItems
      *
      * @ORM\OneToOne(targetEntity="Application\Entity\Products")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="product_id", referencedColumnName="product_id", unique=true, onDelete="RESTRICT")
+     *   @ORM\JoinColumn(name="product_id", referencedColumnName="product_id", unique=true, onDelete="CASCADE")
      * })
      */
     private $product_id;
@@ -85,7 +85,7 @@ class OrderItems
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Orders")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="order_id", referencedColumnName="order_id")
+     *   @ORM\JoinColumn(name="order_id", referencedColumnName="order_id", onDelete="CASCADE")
      * })
      */
     private $order;

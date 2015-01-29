@@ -47,7 +47,7 @@ class Lists implements ListInterface
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Types")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="TypeId", referencedColumnName="TypeId")
+     *   @ORM\JoinColumn(name="TypeId", referencedColumnName="TypeId", onDelete="CASCADE")
      * })
      */
     private $type;
@@ -146,8 +146,11 @@ class Lists implements ListInterface
         return $this;
     }
 
-    public function flushListitems() {
-        foreach($this->Listitems as $listItem) {
+    /**
+     * clear the current list of all list items
+     */
+    public function removeAllListitems() {
+        foreach($this->Listitems->getIterator() as $listItem) {
             $this->removeListitem($listItem);
         }
     }
@@ -160,6 +163,7 @@ class Lists implements ListInterface
     public function removeListitem(\Application\Entity\ListItems $listitem)
     {
         $this->Listitems->removeElement($listitem);
+        $listitem->clearList(); // NOTE: this orphans the item but does not delete it from the db
     }
 
     /**

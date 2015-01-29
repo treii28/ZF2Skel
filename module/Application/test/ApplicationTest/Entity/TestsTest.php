@@ -21,6 +21,9 @@ class TestsTest extends TestingAbstract {
         $this->entityRepository = $this->entityManager->getRepository('\\Application\\Entity\\Tests');
     }
 
+    /**
+     * @group entities
+     */
     public function testsTest() {
         $recordCount = count($this->entityRepository->findAll());
         $newTest = new Tests();

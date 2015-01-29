@@ -103,7 +103,7 @@ class Addresses
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Users")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", onDelete="CASCADE")
      * })
      */
     private $user;
