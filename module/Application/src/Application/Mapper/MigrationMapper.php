@@ -52,7 +52,14 @@ class MigrationMapper extends ServiceAbstract {
         } elseif($opt instanceof \Zend\Db\Sql\Where) {
             $srch = $opt;
         }
-        return $colorTable->select($srch);
+        $select = $colorTable->getSql()->select($srch)
+            ->join('sx_material', 'sx_color.material_id=sx_material.material_id');
+        if(!is_null($srch)) {
+            $select->where($srch);
+        }
+
+        return $colorTable->selectWith($select);
+        //return $colorTable->select($srch);
     }
 
     /**
@@ -72,7 +79,7 @@ class MigrationMapper extends ServiceAbstract {
     public function migrateJoomlaColors($fb=false) {
         if($fb>1) $this->writeOut("Starting migration of joomla colors to Materials..." . PHP_EOL . PHP_EOL);
 
-        if($fb>1) $this->writeOut("Creating/retriving All Materials list..." . PHP_EOL);
+        if($fb>1) $this->writeOut("Creating/retrieving All Materials list..." . PHP_EOL);
         $allMats = $this->getNamedList('All Materials', 'Materials');
         if($fb>1) $this->writeOut("getting joomla color list..." . PHP_EOL);
         $jCols = $this->getJoomlaColors();
@@ -81,7 +88,28 @@ class MigrationMapper extends ServiceAbstract {
         $ccc = 0;
         foreach($jCols as $material) {
             if($fb>1) $this->writeOut("    [" . $ccc++ . "] adding color_id " . $material->color_id . " " . $material->color_desc . PHP_EOL);
+            //$extra = $this->getMaterialData($material);
+
             $newMat = $this->getMaterialsItem($material->color_desc,$material->color_id);
+            $extra = array(
+                'SupplierName'      => "supplier_color_desc",
+                'PopUpMessage'      => "popup_msg",
+                'Priority'          => "priority",
+                'Comment'           => "color_comment"
+            );
+            foreach($extra as $_k => $_v) {
+                if(!empty($material->$_v) || ($material->$_v == "0")) {
+                    $accMeth = 'set' . ucfirst($_k);
+                    if(method_exists($newMat, $accMeth)) {
+                        $newMat->$accMeth($material->$_v);
+                    } else {
+                        throw new \Exception(__METHOD__ . " accessor not found for property '$_k'");
+                    }
+                }
+            }
+            $this->getEntityManager()->persist($newMat);
+            $this->getEntityManager()->flush();
+
             $allMats->addListitem($newMat);
         }
 
@@ -90,6 +118,42 @@ class MigrationMapper extends ServiceAbstract {
         $this->getEntityManager()->flush();
 
         return $this->_output;
+    }
+
+    public function migrateMaterialOptions($fb=false) {
+        if($fb>1) $this->writeOut("getting joomla color list..." . PHP_EOL);
+        $jCols = $this->getJoomlaColors();
+        if($fb>1) $this->writeOut("Total Materials to process: " . $jCols->count() . PHP_EOL);
+
+
+        $ccc = 0;
+        foreach($jCols as $material) {
+            if($fb>1) $this->writeOut("    [" . $ccc++ . "] reviewing material " . $material->color_id . " " . $material->color_desc . PHP_EOL);
+            $extra = array(
+                'Indent Capable'     => "can_indent",
+                'CutOut Capable'     => "can_cutout",
+                'Imprint Capable'    => "can_imprint",
+                'Etch Capable'       => "can_etch",
+                'CoverImage Capable' => "cover_image",
+                'Leather'            => "is_leather",
+                'Discontinued'       => "is_discontinued"
+            );
+            $matEnt = $this->getMaterialsItem($material->color_desc,$material->color_id);
+            foreach($extra as $_k => $_v) {
+                if($material->$_v == true){
+                    $listName = $_k . " Materials";
+                    if($fb>1) $this->writeOut("        adding " . $material->color_id . " " . $material->color_desc . " to " . $listName . " list" . PHP_EOL);
+
+                    if($fb>2) $this->writeOut("        ... creating" . $listName . " option" . PHP_EOL);
+                    $newOption = new \Application\Entity\ItemOptions();
+                    $newOption->setItemrefId($matEnt->getId());
+                    $newOption->setDescription($_v);
+                    $newOption->setContent($material->$_v);
+                    $this->getEntityManager()->persist($newOption);
+                    $this->getEntityManager()->flush();
+                }
+            }
+        }
     }
 
     // convert old Joomla materials to Material Collection Lists
@@ -237,6 +301,7 @@ class MigrationMapper extends ServiceAbstract {
      * @param string $name
      * @param null|integer $legacyId
      * @return \Application\Entity\Materials
+     * @throws \Exception on extra property accessor not found
      */
     private function getMaterialsItem($name,$legacyId=null) {
         $mat = $this->getEntityManager()->getRepository('\\Application\\Entity\\Materials')->findOneBy(array('MaterialName' => $name, 'MaterialId' => $legacyId));
@@ -275,6 +340,7 @@ class MigrationMapper extends ServiceAbstract {
         }
         return $sublist;
     }
+
     /**
      * @return \Application\Entity\Types
      */
@@ -328,5 +394,4 @@ class MigrationMapper extends ServiceAbstract {
         }
         return $this->_joomla;
     }
-
 }

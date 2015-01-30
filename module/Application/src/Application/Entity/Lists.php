@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="Lists")
  * @ORM\Entity
  */
-class Lists implements ListInterface
+class Lists implements GenericInterface
 {
     /**
      * @var integer
@@ -122,7 +122,7 @@ class Lists implements ListInterface
     }
 
     /**
-     * ListInterface alias method for primary Id
+     * GenericInterface alias method for primary Id
      * @return int
      */
     public function getId() {

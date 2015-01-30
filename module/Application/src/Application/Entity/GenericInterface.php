@@ -9,7 +9,7 @@
 namespace Application\Entity;
 
 
-interface ListInterface {
+interface GenericInterface {
 
     /**
      * @return integer

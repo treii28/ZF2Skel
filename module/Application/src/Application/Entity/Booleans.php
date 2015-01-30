@@ -5,24 +5,24 @@ namespace Application\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Vals
+ * Booleans
  *
  * @ORM\Entity
- * @ORM\Table(name="Vals", uniqueConstraints={ @ORM\UniqueConstraint(name="UniqueDesc_idx", columns={"Description" }) })
+ * @ORM\Table(name="Booleans", uniqueConstraints={ @ORM\UniqueConstraint(name="UniqueDesc_idx", columns={"Description" }) })
  */
-class Vals extends ListItems
+class Booleans extends ListItems
 {
     /**
-     * @var string
+     * @var string $Description
      *
      * @ORM\Column(name="Description", type="string", length=128, nullable=true)
      */
     protected $Description;
 
     /**
-     * @var string
+     * @var string $Content
      *
-     * @ORM\Column(name="Content", type="string", length=64, nullable=false)
+     * @ORM\Column(name="Content", type="boolean", nullable=false)
      */
     protected $Content;
 
@@ -35,7 +35,7 @@ class Vals extends ListItems
      * Set Description
      *
      * @param string $description
-     * @return Vals
+     * @return Booleans
      */
     public function setDescription($description)
     {
@@ -47,7 +47,7 @@ class Vals extends ListItems
     /**
      * Get Description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -58,7 +58,7 @@ class Vals extends ListItems
      * Set Content
      *
      * @param string $content
-     * @return Vals
+     * @return Booleans
      */
     public function setContent($content)
     {

@@ -25,8 +25,7 @@ class MigrationController extends AbstractController
     }
 
     public function cliAction() {
-        $mapper = $this->getMapper();
-        $mapper->setOutputType('echo');
+        $this->getMigrationMapper()->setOutputType('echo');
 
         $request = $this->getRequest();
 
@@ -40,13 +39,16 @@ class MigrationController extends AbstractController
         $users = array();
         switch ($mode) {
             case 'materials':
-                $output = $mapper->migrateJoomlaColors($verbosity);
+                $output = $this->getMigrationMapper()->migrateJoomlaColors($verbosity);
                 break;
             case 'collections':
-                $output = $mapper->migrateJoomlaMaterials($verbosity);
+                $output = $this->getMigrationMapper()->migrateJoomlaMaterials($verbosity);
                 break;
             case 'colorrefs':
-                $output = $mapper->migrateColorRefs($verbosity);
+                $output = $this->getMigrationMapper()->migrateColorRefs($verbosity);
+                break;
+            case 'options':
+                $output = $this->getMigrationMapper()->migrateMaterialOptions($verbosity);
                 break;
             default:
                 echo $this->usageMessage();
@@ -60,19 +62,19 @@ class MigrationController extends AbstractController
 
   Usage:
          php public/index.php [--verbose|-v]
-               migration [materials|collections|colorrefs]:mode
+               migration [materials|collections|colorrefs|options]:mode
 
 
 EOT;
     }
-    public function migmatAction() {
 
-        $mapper = $this->getMapper();
-        $mapper->setOutputType('buffer');
+    public function migmatAction()
+    {
+        $this->getMigrationMapper()->setOutputType('buffer');
 
         $response = $this->getResponse();
         $response->setStatusCode(200);
-        $response->setContent($mapper->migrateJoomlaColors(2));
+        $response->setContent($this->getMigrationMapper()->migrateJoomlaColors(2));
 
         $headers = $response->getHeaders();
         $headers->addHeaderLine('Content-Type', 'text/text');
@@ -80,13 +82,13 @@ EOT;
         return $response;
     }
 
-    public function migcollAction() {
-        $mapper = $this->getMapper();
-        $mapper->setOutputType('buffer');
+    public function migcollAction()
+    {
+        $this->getMigrationMapper()->setOutputType('buffer');
 
         $response = $this->getResponse();
         $response->setStatusCode(200);
-        $response->setContent($mapper->migrateJoomlaMaterials(2));
+        $response->setContent($this->getMigrationMapper()->migrateJoomlaMaterials(2));
 
         $headers = $response->getHeaders();
         $headers->addHeaderLine('Content-Type', 'text/text');
@@ -94,17 +96,26 @@ EOT;
         return $response;
     }
 
-    public function migcolrefAction() {
-        $mapper = $this->getMapper();
-        $mapper->setOutputType('buffer');
+    public function migcolrefAction()
+    {
+        $this->getMigrationMapper()->setOutputType('buffer');
 
         $response = $this->getResponse();
         $response->setStatusCode(200);
-        $response->setContent($mapper->migrateColorRefs(2));
+        $response->setContent($this->getMigrationMapper()->migrateColorRefs(2));
 
         $headers = $response->getHeaders();
         $headers->addHeaderLine('Content-Type', 'text/text');
 
         return $response;
+    }
+
+    /**
+     * override just to get the proper phpStorm auto-complete association
+     * 
+     * @return \Application\Mapper\MigrationMapper
+     */
+    public function getMigrationMapper() {
+        return parent::getMapper();
     }
 }

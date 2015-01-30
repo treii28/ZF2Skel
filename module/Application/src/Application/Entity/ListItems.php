@@ -10,16 +10,17 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({
- *      "item"     = "ListItems",
- *      "sublist"  = "Sublists",
- *      "subitem"  = "Subitems",
- *      "val"      = "Vals",
- *      "material" = "Materials",
- *      "printer"  = "Printers",
- *      "paper"    = "Papers"
+ *      "item"       = "ListItems",
+ *      "sublist"    = "Sublists",
+ *      "subitem"    = "Subitems",
+ *      "string"     = "Strings",
+ *      "boolean"    = "Booleans",
+ *      "material"   = "Materials",
+ *      "printer"    = "Printers",
+ *      "paper"      = "Papers"
  * })
  */
-class ListItems implements ListInterface
+class ListItems implements GenericInterface
 {
 
     // <editor-fold desc="Entity properties bound to db columns">
@@ -80,6 +81,16 @@ class ListItems implements ListInterface
     // <editor-fold desc="Entity db properties accessors">
 
     /**
+     * Get ListItemId
+     *
+     * @return integer
+     */
+    public function getListItemId()
+    {
+        return $this->ListItemId;
+    }
+
+    /**
      * Set ListId
      *
      * @param integer $listId
@@ -123,16 +134,6 @@ class ListItems implements ListInterface
     public function getEntityName()
     {
         return $this->EntityName;
-    }
-
-    /**
-     * Get ListItemId
-     *
-     * @return integer 
-     */
-    public function getListItemId()
-    {
-        return $this->ListItemId;
     }
 
     /**
@@ -218,7 +219,7 @@ class ListItems implements ListInterface
     }
 
     /**
-     * ListInterface alias to get primary Id
+     * GenericInterface alias to get primary Id
      *
      * @return int
      */

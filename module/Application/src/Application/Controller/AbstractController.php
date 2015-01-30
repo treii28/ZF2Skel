@@ -10,8 +10,9 @@ namespace Application\Controller;
 
 //use Zend\View\Model\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Server\Reflection\ReflectionClass;
 
-class AbstractController  extends AbstractActionController
+class AbstractController extends AbstractActionController
 {
     const MAPPER_NAME = '';
 
@@ -49,6 +50,7 @@ class AbstractController  extends AbstractActionController
      */
     protected function getDefMapper() {
         if(!$this->_defMapper) {
+            $servloc = $this->getServiceLocator();
             $this->_defMapper = $this->getServiceLocator()->get($this->_getBaseName()."Mapper");
         }
         return $this->_defMapper;
