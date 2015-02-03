@@ -187,6 +187,7 @@ $modcfg = array(
             'AddressMapper'   => 'Application\Mapper\AddressMapper',
             'ListMapper'      => 'Application\Mapper\ListMapper',
             'ListItemMapper'  => 'Application\Mapper\ListItemMapper',
+            'MaterialMapper'  => 'Application\Mapper\MaterialMapper',
             'OrderItemMapper' => 'Application\Mapper\OrderItemMapper',
             'OrderMapper'     => 'Application\Mapper\OrderMapper',
             'ProductMapper'   => 'Application\Mapper\ProductMapper',

@@ -8,6 +8,8 @@
 
 namespace ApplicationTest\Mapper;
 
+require_once(realpath(__DIR__ . "/../") . "/TestingAbstract.php");
+
 use ApplicationTest\TestingAbstract;
 
 class MaterialMapperTest extends TestingAbstract {
