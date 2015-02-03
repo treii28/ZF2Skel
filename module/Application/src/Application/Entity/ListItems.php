@@ -3,6 +3,7 @@
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use \Doctrine\Common\Collections\Criteria;
 
 /**
  * @ORM\Entity
@@ -60,7 +61,20 @@ class ListItems implements GenericInterface
      *
      * @ORM\Column(name="priority", type="integer", nullable=true)
      */
+
     protected $priority;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $ItemOptions
+     *
+     * @ORM\OneToMany(targetEntity="Application\Entity\ItemOptions", mappedBy="ItemOptionId", cascade={"all"})
+     */
+    private $ItemOptions;
+
+    /**
+     * @var array $valid_options
+     */
+    private $valid_options = array();
 
     // </editor-fold desc="Entity properties bound to db columns">
 
@@ -196,6 +210,103 @@ class ListItems implements GenericInterface
         return $this->priority;
     }
 
+    /**
+     * @param string $ioDesc
+     * @param boolean $val
+     * @return Lists
+     * @throws \Exception
+     */
+    public function setOption($ioDesc, $val) {
+        $newOpt = new ItemOptions();
+        $newOpt->setDescription($ioDesc);
+        $newOpt->setContent($val);
+        return $this->addItemOption($this->getId());
+    }
+
+    /**
+     * Add ItemOption
+     *
+     * @param \Application\Entity\ItemOptions $itemoption
+     * @return \Application\Entity\ListItems
+     * @throws \Exception on invalid itemoption type
+     */
+    public function addItemOption(\Application\Entity\ItemOptions $itemoption)
+    {
+        if(!($itemoption instanceof ItemOptions) ) {
+            throw new \Exception(__METHOD__ . " can only add instances of ItemOptions");
+        }
+        if(!in_array($itemoption->getDescription(), $this->valid_options)) {
+            throw new \Exception(__METHOD__ . " invalid option '" . $itemoption->getDescription() . "'");
+        } else {
+            $this->removeItemOptionByDescription($itemoption->getDescription()); // only one option of any type should be included in the item array so remove any matching first
+        }
+
+        $itemoption->setItemrefId($this->getId());
+        $this->ItemOptions->add($itemoption);
+
+        return $this;
+    }
+
+    /**
+     * clear the current list of all list items
+     * @return \Application\Entity\ListItems
+     */
+    public function removeAllItemOptions() {
+        foreach($this->ItemOptions->getIterator() as $itemOption) {
+            $this->removeItemOption($itemOption);
+        }
+        return $this;
+    }
+
+    /**
+     * Remove ItemOption
+     *
+     * @param \Application\Entity\ItemOptions $itemoption
+     * @return \Application\Entity\ListItems
+     */
+    public function removeItemOption(\Application\Entity\ItemOptions $itemoption)
+    {
+        $this->ItemOptions->removeElement($itemoption);
+        return $this;
+    }
+
+    /**
+     * Remove ItemOption by description
+     *
+     * @param string $ioDesc
+     */
+    public function removeItemOptionByDescription($ioDesc)
+    {
+        $this->getOptions($ioDesc)->forAll( function($k, $itemOption) { $this->removeItemOption($itemOption); } );
+    }
+
+    /**
+     * @param $ioDesc
+     * @return \Application\Entity\ItemOptions
+     */
+    public function getOption($ioDesc) {
+        return $this->getOptions($ioDesc)->current();
+    }
+
+    /**
+     * @param $ioDesc
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getOptions($ioDesc) {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("Description", $ioDesc));
+        return $this->getItemOptions()->matching($criteria);
+    }
+
+    /**
+     * Get ItemOptions
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getItemOptions()
+    {
+        return $this->ItemOptions;
+    }
+
     // </editor-fold desc="Entity db properties accessors">
 
     // <editor-fold desc="Additional helper functions">
@@ -211,7 +322,7 @@ class ListItems implements GenericInterface
     /**
      * Get list
      *
-     * @return \Application\Entity\Lists 
+     * @return \Application\Entity\Lists
      */
     public function getList()
     {

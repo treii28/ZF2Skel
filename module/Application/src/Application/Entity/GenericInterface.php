@@ -14,5 +14,6 @@ interface GenericInterface {
     /**
      * @return integer
      */
-    public function getId();
+    function getId();
+
 }

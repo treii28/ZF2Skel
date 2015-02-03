@@ -13,21 +13,21 @@ use Doctrine\ORM\Mapping as ORM;
 class Lists implements GenericInterface
 {
     /**
-     * @var integer
+     * @var integer $TypeId
      *
      * @ORM\Column(name="TypeId", type="integer", nullable=false)
      */
     private $TypeId;
 
     /**
-     * @var string
+     * @var string $ListName
      *
      * @ORM\Column(name="ListName", type="string", length=64, nullable=false)
      */
     private $ListName;
 
     /**
-     * @var integer
+     * @var integer $ListId
      *
      * @ORM\Column(name="ListId", type="integer")
      * @ORM\Id
@@ -36,7 +36,7 @@ class Lists implements GenericInterface
     private $ListId;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \Doctrine\Common\Collections\ArrayCollection $Listitems
      *
      * @ORM\OneToMany(targetEntity="Application\Entity\ListItems", mappedBy="ListId", cascade={"all"})
      * @ORM\OrderBy({"priority" = "ASC"})
@@ -44,7 +44,7 @@ class Lists implements GenericInterface
     private $Listitems;
 
     /**
-     * @var \Application\Entity\Types
+     * @var \Application\Entity\Types $type
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Types")
      * @ORM\JoinColumns({
@@ -170,7 +170,7 @@ class Lists implements GenericInterface
     /**
      * Get Listitems
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getListitems()
     {

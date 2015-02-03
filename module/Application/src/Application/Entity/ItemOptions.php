@@ -25,8 +25,6 @@ class ItemOptions
      * @var integer $ItemfrefId
      *
      * @ORM\Column(name="ItemrefId", type="integer", options={"unsigned":true}, nullable=false)
-     * @ORM\OneToOne(targetEntity="ListItems")
-     * @ORM\JoinColumn(name="ItemrefId", referencedColumnName="ListItemId")
      */
     protected $ItemrefId;
 
@@ -38,7 +36,7 @@ class ItemOptions
     protected $Description;
 
     /**
-     * @var string $Content
+     * @var boolean $Content
      *
      * @ORM\Column(name="Content", type="boolean", nullable=false)
      */

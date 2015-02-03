@@ -57,7 +57,7 @@ class Orders
     private $orderId;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Application\Entity\OrderItems", mappedBy="orderId", cascade={"all"})
      * @ORM\OrderBy({
@@ -236,7 +236,7 @@ class Orders
     /**
      * Get OrderItems
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOrderItems()
     {

@@ -57,7 +57,7 @@ class Users
     private $userId;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Application\Entity\Addresses", mappedBy="userId", cascade={"all"})
      * @ORM\OrderBy({
@@ -69,7 +69,7 @@ class Users
     private $Addresses;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Application\Entity\Orders", mappedBy="userId", cascade={"all"})
      * @ORM\OrderBy({
@@ -238,7 +238,7 @@ class Users
     /**
      * Get Addresses
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getAddresses()
     {
@@ -271,7 +271,7 @@ class Users
     /**
      * Get Orders
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOrders()
     {

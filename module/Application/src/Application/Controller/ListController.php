@@ -50,8 +50,8 @@ class ListController extends AbstractController
     }
 
     /**
-     * @param integer|string $id
-     * @return \Doctrine\Common\Collections\Collection
+     * @param integer|string $listId
+     * @return \Doctrine\Common\Collections\ArrayCollection
      * @throws \Exception
      */
     protected function getListMembers($listId) {

@@ -51,6 +51,11 @@ class Materials extends ListItems
      */
     protected $PopUpMessage;
 
+    /**
+     * @var array $valid_options
+     */
+    private $valid_options = array('a','b','c');
+
     // </editor-fold desc="Entity properties bound to db columns">
 
     // <editor-fold desc="Core class functions">
