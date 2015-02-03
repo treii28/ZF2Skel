@@ -11,7 +11,6 @@ namespace ApplicationTest\Mapper;
 require_once(realpath(__DIR__ . "/../") . "/TestingAbstract.php");
 
 use ApplicationTest\TestingAbstract;
-use Application\Mapper\ListItemMapper;
 
 class ListItemsMapperTest extends TestingAbstract {
     /**
@@ -21,15 +20,21 @@ class ListItemsMapperTest extends TestingAbstract {
 
     protected function setUp() {
         parent::setUp();
-        $this->mapper = $this->serviceManager->get('ListItemMapper');
     }
     protected function tearDown() {
         parent::tearDown();
     }
 
     public function testListItemMapper() {
-        $this->assertInstanceOf('\\Application\\Mapper\\ListItemMapper', $this->mapper);
-        $item = $this->mapper->findRecordById(1);
+        $this->assertInstanceOf('\\Application\\Mapper\\ListItemMapper', $this->getMapper());
+        $item = $this->getMapper()->findRecordById(1);
         $ic = get_class($item);
+    }
+
+    /**
+     * @return \Application\Mapper\ListItemMapper;
+     */
+    private function getMapper() {
+        return $this->serviceManager->get('ListItemMapper');
     }
 }

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ItemOptions
  *
  * @ORM\Entity
- * @ORM\Table(name="ItemOptions", uniqueConstraints={ @ORM\UniqueConstraint(name="UniqueItemOpt_idx", columns={"ItemrefId", "Description"}) })
+ * @ORM\Table(name="ItemOptions", uniqueConstraints={ @ORM\UniqueConstraint(name="UniqueItemOpt_idx", columns={"ListItemId", "Description"}) })
  */
 class ItemOptions
 {
@@ -22,11 +22,11 @@ class ItemOptions
     protected $ItemOptionId;
 
     /**
-     * @var integer $ItemfrefId
+     * @var integer $ListItemId
      *
-     * @ORM\Column(name="ItemrefId", type="integer", options={"unsigned":true}, nullable=false)
+     * @ORM\Column(name="ListItemId", type="integer", options={"unsigned":true}, nullable=true)
      */
-    protected $ItemrefId;
+    protected $ListItemId;
 
     /**
      * @var string $Description
@@ -43,8 +43,6 @@ class ItemOptions
     protected $Content;
 
     public function __construct() {
-        parent::__construct();
-        $this->setItemrefEntity(__CLASS__);
     }
 
     /**
@@ -58,26 +56,26 @@ class ItemOptions
     }
 
     /**
-     * Set ItemrefId
+     * Set ListItemId
      *
-     * @param string $itemrefId
+     * @param string $listitemId
      * @return ItemOptions
      */
-    public function setItemrefId($itemrefId)
+    public function setListItemId($listitemId)
     {
-        $this->ItemrefId = $itemrefId;
+        $this->ListItemId = $listitemId;
 
         return $this;
     }
 
     /**
-     * Get ItemrefId
+     * Get ListItemId
      *
      * @return string
      */
-    public function getItemrefId()
+    public function getListItemId()
     {
-        return $this->ItemrefId;
+        return $this->ListItemId;
     }
 
     /**

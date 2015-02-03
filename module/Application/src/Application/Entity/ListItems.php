@@ -67,14 +67,16 @@ class ListItems implements GenericInterface
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $ItemOptions
      *
-     * @ORM\OneToMany(targetEntity="Application\Entity\ItemOptions", mappedBy="ItemOptionId", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="Application\Entity\ItemOptions", mappedBy="ListItemId", cascade={"all"})
+     * @ORM\OrderBy({"Description" = "ASC"})
      */
     private $ItemOptions;
 
     /**
      * @var array $valid_options
+     * @static
      */
-    private $valid_options = array();
+    protected static $valid_options = array();
 
     // </editor-fold desc="Entity properties bound to db columns">
 
@@ -211,19 +213,6 @@ class ListItems implements GenericInterface
     }
 
     /**
-     * @param string $ioDesc
-     * @param boolean $val
-     * @return Lists
-     * @throws \Exception
-     */
-    public function setOption($ioDesc, $val) {
-        $newOpt = new ItemOptions();
-        $newOpt->setDescription($ioDesc);
-        $newOpt->setContent($val);
-        return $this->addItemOption($this->getId());
-    }
-
-    /**
      * Add ItemOption
      *
      * @param \Application\Entity\ItemOptions $itemoption
@@ -235,26 +224,13 @@ class ListItems implements GenericInterface
         if(!($itemoption instanceof ItemOptions) ) {
             throw new \Exception(__METHOD__ . " can only add instances of ItemOptions");
         }
-        if(!in_array($itemoption->getDescription(), $this->valid_options)) {
+        if(!in_array($itemoption->getDescription(), static::$valid_options)) {
             throw new \Exception(__METHOD__ . " invalid option '" . $itemoption->getDescription() . "'");
-        } else {
-            $this->removeItemOptionByDescription($itemoption->getDescription()); // only one option of any type should be included in the item array so remove any matching first
         }
 
-        $itemoption->setItemrefId($this->getId());
+        $itemoption->setListItemId($this->getId());
         $this->ItemOptions->add($itemoption);
 
-        return $this;
-    }
-
-    /**
-     * clear the current list of all list items
-     * @return \Application\Entity\ListItems
-     */
-    public function removeAllItemOptions() {
-        foreach($this->ItemOptions->getIterator() as $itemOption) {
-            $this->removeItemOption($itemOption);
-        }
         return $this;
     }
 
@@ -270,15 +246,6 @@ class ListItems implements GenericInterface
         return $this;
     }
 
-    /**
-     * Remove ItemOption by description
-     *
-     * @param string $ioDesc
-     */
-    public function removeItemOptionByDescription($ioDesc)
-    {
-        $this->getOptions($ioDesc)->forAll( function($k, $itemOption) { $this->removeItemOption($itemOption); } );
-    }
 
     /**
      * @param $ioDesc
@@ -305,6 +272,14 @@ class ListItems implements GenericInterface
     public function getItemOptions()
     {
         return $this->ItemOptions;
+    }
+
+    /**
+     * @return array
+     * @static
+     */
+    public static function getValidOptions() {
+        return static::$valid_options;
     }
 
     // </editor-fold desc="Entity db properties accessors">

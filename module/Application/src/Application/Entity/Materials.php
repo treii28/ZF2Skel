@@ -53,8 +53,9 @@ class Materials extends ListItems
 
     /**
      * @var array $valid_options
+     * @static
      */
-    private $valid_options = array('a','b','c');
+    protected static $valid_options = array('Indent Capable Materials','CutOut Capable Materials','Imprint Capable Materials','Etch Capable Materials','CoverImage Capable Materials','Leather Materials','Discontinued Materials');
 
     // </editor-fold desc="Entity properties bound to db columns">
 

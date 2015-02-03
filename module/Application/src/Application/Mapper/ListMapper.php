@@ -9,21 +9,12 @@
 namespace Application\Mapper;
 
 use Application\Entity\Lists;
+use Application\Entity\ListItems;
 use Zend\Mvc\Application;
 
 class ListMapper extends AbstractMapper {
 
     const ENTITY_NAME = 'Application\\Entity\\Lists';
-
-    /**
-     * @var TypeMapper $_typeMapper
-     */
-    private $_typeMapper;
-
-    /**
-     * @var ListItemMapper $_listitemsMapper
-     */
-    private $_listitemsMapper;
 
     /**
      * @param string $name
@@ -41,7 +32,17 @@ class ListMapper extends AbstractMapper {
         return $this->getRepo()->find($id);
     }
 
-    public function populateListItems(\Application\Entity\Lists &$list) {
+    /**
+     * clear the current list of all list items
+     */
+    public function removeAllListitems(Lists &$list) {
+        foreach($list->getListitems()->getIterator() as $listItem) {
+            $list->removeListitem($listItem);
+        }
+        $this->getEntityManager()->flush();
+    }
+
+    public function populateListItems(Lists &$list) {
         $rawSubItems = $this->getListItemsMapper()->getRepo()->findBy(array('ListId' => $list->getListId()));
         $list->initListitems();
         foreach($rawSubItems as $subItem) {
@@ -57,7 +58,7 @@ class ListMapper extends AbstractMapper {
 
     /**
      * @param integer $subitemId
-     * @return \Application\Entity\ListItems
+     * @return ListItems
      */
     private function getSubitemRef($subitemId) {
         $subItemRef = $this->getListItemsMapper()->getRepo()->findBy(array('SubitemId' => $subitemId));
@@ -78,16 +79,16 @@ class ListMapper extends AbstractMapper {
     /**
      * @param integer $itemId
      * @param string $entityName
-     * @return \Application\Entity\ListItems|null
+     * @return ListItems|null
      */
-    private function getItemRef($itemId,$entityName) {
+    private function getItemRef($itemId, $entityName) {
         $refRepo = $this->getEntityManager()->getRepository($entityName);
         return $refRepo->find($itemId);
     }
 
     /**
      * @param integer $sublistId
-     * @return \Application\Entity\Lists
+     * @return Lists
      */
     private function getSublistRef($sublistId) {
         $subList = $this->getRepo()->find($sublistId);

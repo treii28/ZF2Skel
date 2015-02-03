@@ -148,15 +148,6 @@ class Lists implements GenericInterface
     }
 
     /**
-     * clear the current list of all list items
-     */
-    public function removeAllListitems() {
-        foreach($this->Listitems->getIterator() as $listItem) {
-            $this->removeListitem($listItem);
-        }
-    }
-
-    /**
      * Remove Listitem
      *
      * @param \Application\Entity\ListItems $listitem

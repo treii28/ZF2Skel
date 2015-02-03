@@ -9,6 +9,8 @@
 namespace Application\Mapper;
 
 use Application\ServiceAbstract;
+//use Application\Entity\Materials;
+use Application\Mapper\ListItemMapper;
 use Zend\Db\Adapter\Adapter as ZDbAdapter;
 //use Zend\Db\Sql\Sql;
 use Zend\Db\TableGateway\TableGateway;
@@ -120,42 +122,6 @@ class MigrationMapper extends ServiceAbstract {
         return $this->_output;
     }
 
-    public function migrateMaterialOptions($fb=false) {
-        if($fb>1) $this->writeOut("getting joomla color list..." . PHP_EOL);
-        $jCols = $this->getJoomlaColors();
-        if($fb>1) $this->writeOut("Total Materials to process: " . $jCols->count() . PHP_EOL);
-
-
-        $ccc = 0;
-        foreach($jCols as $material) {
-            if($fb>1) $this->writeOut("    [" . $ccc++ . "] reviewing material " . $material->color_id . " " . $material->color_desc . PHP_EOL);
-            $extra = array(
-                'Indent Capable'     => "can_indent",
-                'CutOut Capable'     => "can_cutout",
-                'Imprint Capable'    => "can_imprint",
-                'Etch Capable'       => "can_etch",
-                'CoverImage Capable' => "cover_image",
-                'Leather'            => "is_leather",
-                'Discontinued'       => "is_discontinued"
-            );
-            $matEnt = $this->getMaterialsItem($material->color_desc,$material->color_id);
-            foreach($extra as $_k => $_v) {
-                if($material->$_v == true){
-                    $listName = $_k . " Materials";
-                    if($fb>1) $this->writeOut("        adding " . $material->color_id . " " . $material->color_desc . " to " . $listName . " list" . PHP_EOL);
-
-                    if($fb>2) $this->writeOut("        ... creating" . $listName . " option" . PHP_EOL);
-                    $newOption = new \Application\Entity\ItemOptions();
-                    $newOption->setItemrefId($matEnt->getId());
-                    $newOption->setDescription($_v);
-                    $newOption->setContent($material->$_v);
-                    $this->getEntityManager()->persist($newOption);
-                    $this->getEntityManager()->flush();
-                }
-            }
-        }
-    }
-
     // convert old Joomla materials to Material Collection Lists
     public function migrateJoomlaMaterials($fb=false) {
 
@@ -254,6 +220,37 @@ class MigrationMapper extends ServiceAbstract {
         }
 
         return $this->_output;
+    }
+
+    public function migrateMaterialOptions($fb=false) {
+        if($fb>1) $this->writeOut("getting joomla color list..." . PHP_EOL);
+        $jCols = $this->getJoomlaColors();
+        if($fb>1) $this->writeOut("Total Materials to process: " . $jCols->count() . PHP_EOL);
+
+
+        $ccc = 0;
+        foreach($jCols as $material) {
+            if($fb>1) $this->writeOut("    [" . $ccc++ . "] reviewing material " . $material->color_id . " " . $material->color_desc . PHP_EOL);
+            $extra = array(
+                'Indent Capable'     => "can_indent",
+                'CutOut Capable'     => "can_cutout",
+                'Imprint Capable'    => "can_imprint",
+                'Etch Capable'       => "can_etch",
+                'CoverImage Capable' => "cover_image",
+                'Leather'            => "is_leather",
+                'Discontinued'       => "is_discontinued"
+            );
+            $matEnt = $this->getMaterialsItem($material->color_desc,$material->color_id);
+            foreach($extra as $_k => $_v) {
+                $optionName = $_k . " Materials";
+                if($fb>1) $this->writeOut("        setting " . $material->color_id . " " . $material->color_desc . " '" . $optionName . "' option to " . $_v . PHP_EOL);
+
+                if($fb>2) $this->writeOut("        ... creating " . $optionName . " option" . PHP_EOL);
+
+                $liMapper = $this->getListItemMapper();
+                $liMapper->setOption($matEnt, $optionName, ($material->$_v == true));
+            }
+        }
     }
 
     public function setOutputType($type) {
@@ -372,6 +369,14 @@ class MigrationMapper extends ServiceAbstract {
             $this->getEntityManager()->flush();
         }
         return $list;
+    }
+
+    /**
+     * @return ListItemMapper
+     */
+    public function getListItemMapper()
+    {
+        return $this->getMapper('ListItemMapper');
     }
 
     /**
