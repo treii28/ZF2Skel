@@ -27,9 +27,9 @@ class MaterialMapper extends ListItemMapper {
         }
 
         $qb = $this->getQueryBuilder();
-        $q = $qb->select()
-            ->from("Materials", 'm')
-            ->innerJoin('ItemOptions', 'io', 'WITH', 'io.ListItemId = m.ListItemId')
+        $q = $qb->select('m')
+            ->from('Application\\Entity\\Materials', 'm')
+            ->innerJoin('Application\\Entity\\ItemOptions', 'io', 'WITH', 'io.ListItemId = m.ListItemId')
             ->where($qb->expr()->eq('io.Description', "'$optionName'"))
             ->andWhere($qb->expr()->eq('io.Content', $val))
             ->orderBy('m.MaterialName')

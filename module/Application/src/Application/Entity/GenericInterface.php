@@ -12,6 +12,8 @@ namespace Application\Entity;
 interface GenericInterface {
 
     /**
+     * alias function to get the primary Id
+     *
      * @return integer
      */
     function getId();

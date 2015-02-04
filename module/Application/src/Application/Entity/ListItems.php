@@ -3,11 +3,11 @@
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use \Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="ListItems")
+ * @ORM\Table(name="ListItems", uniqueConstraints={ @ORM\UniqueConstraint(name="UniqueListItem_idx", columns={"ListId", "ListItemId"}) })
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({
@@ -41,13 +41,6 @@ class ListItems implements GenericInterface
      * @ORM\Column(name="ListId", type="integer", nullable=true)
      */
     protected $ListId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="EntityName", type="string", length=64, nullable=true)
-     */
-    protected $EntityName;
 
     /**
      * @var string $Comment
@@ -91,7 +84,6 @@ class ListItems implements GenericInterface
     protected $list;
 
     public function __construct() {
-        $this->setEntityName(__CLASS__);
     }
 
     // <editor-fold desc="Entity db properties accessors">
@@ -127,29 +119,6 @@ class ListItems implements GenericInterface
     public function getListId()
     {
         return $this->ListId;
-    }
-
-    /**
-     * Set EntityName
-     *
-     * @param string $entityName
-     * @return ListItems
-     */
-    protected function setEntityName($entityName)
-    {
-        $this->EntityName = $entityName;
-
-        return $this;
-    }
-
-    /**
-     * Get EntityName
-     *
-     * @return string 
-     */
-    public function getEntityName()
-    {
-        return $this->EntityName;
     }
 
     /**

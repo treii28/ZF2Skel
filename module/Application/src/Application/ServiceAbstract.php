@@ -155,7 +155,7 @@ abstract class ServiceAbstract implements ZendServiceLocatorAwareInterface
      */
     public function findRecordById($id,$entityName)
     {
-        return $this->getEntityManager()->find($this->getEntityName(),$id);
+        return $this->getEntityManager()->find($entityName,$id);
     }
 
     public function findAll($entityName) {

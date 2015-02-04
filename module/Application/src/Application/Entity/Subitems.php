@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Subitems extends ListItems
 {
     /**
-     * @var \Application\Entity\ListItems $subitem
+     * @var ListItems $subitem
      */
     private $subitem;
 
@@ -26,7 +26,6 @@ class Subitems extends ListItems
 
     public function __construct() {
         parent::__construct();
-        $this->setEntityName(__CLASS__);
     }
 
     /**
@@ -59,11 +58,11 @@ class Subitems extends ListItems
     /**
      * set Subitem
      *
-     * @param \Application\Entity\ListItems $subitem
+     * @param ListItems $subitem
      * @return Subitems
      * @throws \Exception on invalid subItem
      */
-    public function setSubitem(\Application\Entity\ListItems $subitem)
+    public function setSubitem(ListItems $subitem)
     {
         if(intval($subitem->getId()) > 0) {
             $this->setRefitemId($subitem->getId());
@@ -77,7 +76,7 @@ class Subitems extends ListItems
     }
 
     /**
-     * @return \Application\Entity\ListItems|null
+     * @return ListItems|null
      */
     public function getSubitem()
     {

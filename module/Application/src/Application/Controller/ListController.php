@@ -22,7 +22,7 @@ class ListController extends AbstractController
     }
 
     public function typesAction() {
-        $types = $this->getTypeMapper()->findAll();
+        $types = $this->getTypeMapper()->findAll('\\Application\\Entity\\Types');
         return new ViewModel(array('types' => $types));
     }
 

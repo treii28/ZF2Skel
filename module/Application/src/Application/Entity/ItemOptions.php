@@ -131,8 +131,4 @@ class ItemOptions
     public function getId() {
         return $this->getItemOptionId();
     }
-
-    public function getItemEntity() {
-        return __CLASS__;
-    }
 }

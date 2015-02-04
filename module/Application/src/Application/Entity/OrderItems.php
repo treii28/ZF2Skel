@@ -268,7 +268,7 @@ class OrderItems
      * @param \Application\Entity\Orders $order
      * @return OrderItems
      */
-    public function setOrder(\Application\Entity\Orders $order = null)
+    public function setOrder(Orders $order = null)
     {
         $this->order = $order;
 

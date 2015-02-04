@@ -29,9 +29,11 @@ class ListItemMapper extends AbstractMapper {
         parent::__construct();
     }
 
+    /*
     protected function getEntityName() {
         return self::ENTITY_NAME;
     }
+    */
 
     /**
      * @param ListItems $listItem

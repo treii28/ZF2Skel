@@ -34,7 +34,6 @@ class Papers extends ListItems
 
     public function __construct() {
         parent::__construct();
-        $this->setEntityName(__CLASS__);
     }
 
     /**
@@ -79,12 +78,5 @@ class Papers extends ListItems
     public function getPaperName()
     {
         return $this->PaperName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getItemEntity() {
-        return __CLASS__;
     }
 }

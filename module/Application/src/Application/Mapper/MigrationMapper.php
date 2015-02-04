@@ -46,7 +46,7 @@ class MigrationMapper extends ServiceAbstract {
      * @param null|int|\Zend\Db\Sql\Where $opt
      * @return \Zend\Db\ResultSet\ResultSet
      */
-    public function getJoomlaColors($opt=null) {
+    public function getJoomlaColors($opt=null,$join=true) {
         $colorTable = $this->getJoomlaTable('sx_color');
         $srch = null;
         if(is_int($opt) && (intval($opt) > 0)) {
@@ -54,8 +54,10 @@ class MigrationMapper extends ServiceAbstract {
         } elseif($opt instanceof \Zend\Db\Sql\Where) {
             $srch = $opt;
         }
-        $select = $colorTable->getSql()->select($srch)
-            ->join('sx_material', 'sx_color.material_id=sx_material.material_id');
+        $select = $colorTable->getSql()->select();
+        if($join) {
+            $select->join('sx_material', 'sx_color.material_id=sx_material.material_id');
+        }
         if(!is_null($srch)) {
             $select->where($srch);
         }
@@ -132,6 +134,7 @@ class MigrationMapper extends ServiceAbstract {
         // build material collections
         $matCollList = $this->getNamedList('All Material Collections', 'Material Collection List');
         $jMatCols = array();
+
         if($fb>1) $this->writeOut("Iterating through joomla materials to add specific collections..." . PHP_EOL);
         $ccount = 0;
         foreach($jMats as $collection) {
@@ -162,8 +165,8 @@ class MigrationMapper extends ServiceAbstract {
         $defCollName = 'not in a collection';
         $defColl = $this->getNamedList($defCollName, 'Material Collection');
         $where = new \Zend\Db\Sql\Where();
-        $where->greaterThanOrEqualTo('material_id', 99);
-        $noList = $this->getJoomlaColors($where);
+        $where->greaterThanOrEqualTo('sx_color.material_id', 99);
+        $noList = $this->getJoomlaColors($where,false);
         if($fb>1) $this->writeOut("Found " . $noList->count() . " items not in collections" . PHP_EOL);
         $ncc = 0;
         foreach($noList as $col) {
@@ -211,7 +214,7 @@ class MigrationMapper extends ServiceAbstract {
             if ($fb > 1) $this->writeOut("Creating an adding link to collection list" . PHP_EOL);
             $newLink = $this->getSubItem($matItem->getListItemId(), $matColl);
 
-            if ($fb > 1) $this->writeOut("Creating an adding collection list link to all collections list (of lists)" . PHP_EOL);
+            if ($fb > 1) $this->writeOut("Creating and adding collection list link to all collections list (of lists)" . PHP_EOL);
             $matColl->addListitem($newLink);
             if ($fb > 1) $this->writeOut("Persisting and flushing all collections list (of lists)" . PHP_EOL);
             $allMats = $this->getNamedList('All Materials', 'Materials');
@@ -232,23 +235,22 @@ class MigrationMapper extends ServiceAbstract {
         foreach($jCols as $material) {
             if($fb>1) $this->writeOut("    [" . $ccc++ . "] reviewing material " . $material->color_id . " " . $material->color_desc . PHP_EOL);
             $extra = array(
-                'Indent Capable'     => "can_indent",
-                'CutOut Capable'     => "can_cutout",
-                'Imprint Capable'    => "can_imprint",
-                'Etch Capable'       => "can_etch",
-                'CoverImage Capable' => "cover_image",
-                'Leather'            => "is_leather",
-                'Discontinued'       => "is_discontinued"
+                'Indent'       => "can_indent",
+                'CutOut'       => "can_cutout",
+                'Imprint'      => "can_imprint",
+                'Etch'         => "can_etch",
+                'CoverImage'   => "cover_image",
+                'Leather'      => "is_leather",
+                'Discontinued' => "is_discontinued"
             );
             $matEnt = $this->getMaterialsItem($material->color_desc,$material->color_id);
             foreach($extra as $_k => $_v) {
-                $optionName = $_k . " Materials";
-                if($fb>1) $this->writeOut("        setting " . $material->color_id . " " . $material->color_desc . " '" . $optionName . "' option to " . $_v . PHP_EOL);
+                if($fb>1) $this->writeOut("        setting " . $material->color_id . " " . $material->color_desc . " '" . $_k . "' option to " . $_v . PHP_EOL);
 
-                if($fb>2) $this->writeOut("        ... creating " . $optionName . " option" . PHP_EOL);
+                if($fb>2) $this->writeOut("        ... creating " . $_k . " option" . PHP_EOL);
 
                 $liMapper = $this->getListItemMapper();
-                $liMapper->setOption($matEnt, $optionName, ($material->$_v == true));
+                $liMapper->setOption($matEnt, $_k, ($material->$_v == true));
             }
         }
     }

@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Sublists extends ListItems
 {
     /**
-     * @var \Application\Entity\Lists $sublist
+     * @var Lists $sublist
      */
     protected $sublist;
 
@@ -26,7 +26,6 @@ class Sublists extends ListItems
 
     public function __construct() {
         parent::__construct();
-        $this->setEntityName(__CLASS__);
     }
 
     /**
@@ -59,10 +58,10 @@ class Sublists extends ListItems
     /**
      * set Sublist
      *
-     * @param \Application\Entity\Lists|null $sublist
+     * @param Lists|null $sublist
      * @return Sublists
      */
-    public function setSubList(\Application\Entity\Lists $sublist = null)
+    public function setSubList(Lists $sublist = null)
     {
         if(is_null($sublist)) {
             if(isset($this->ReflistId) && (intval($this->ReflistId) > 0)) {
@@ -75,7 +74,7 @@ class Sublists extends ListItems
     }
 
     /**
-     * @return \Application\Entity\Lists|null
+     * @return Lists|null
      */
     public function getSubList()
     {

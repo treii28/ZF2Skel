@@ -213,10 +213,10 @@ class Orders
     /**
      * Add OrderItems
      *
-     * @param \Application\Entity\OrderItems $orderItems
+     * @param OrderItems $orderItems
      * @return Orders
      */
-    public function addOrderItem(\Application\Entity\OrderItems $orderItems)
+    public function addOrderItem(OrderItems $orderItems)
     {
         $this->OrderItems[] = $orderItems;
 
@@ -226,9 +226,9 @@ class Orders
     /**
      * Remove OrderItems
      *
-     * @param \Application\Entity\OrderItems $orderItems
+     * @param OrderItems $orderItems
      */
-    public function removeOrderItem(\Application\Entity\OrderItems $orderItems)
+    public function removeOrderItem(OrderItems $orderItems)
     {
         $this->OrderItems->removeElement($orderItems);
     }
@@ -246,10 +246,10 @@ class Orders
     /**
      * Set user
      *
-     * @param \Application\Entity\Users $user
+     * @param Users $user
      * @return Orders
      */
-    public function setUser(\Application\Entity\Users $user = null)
+    public function setUser(Users $user = null)
     {
         $this->user = $user;
 
@@ -259,7 +259,7 @@ class Orders
     /**
      * Get user
      *
-     * @return \Application\Entity\Users 
+     * @return Users
      */
     public function getUser()
     {

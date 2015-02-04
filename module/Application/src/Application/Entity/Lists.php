@@ -22,7 +22,7 @@ class Lists implements GenericInterface
     /**
      * @var string $ListName
      *
-     * @ORM\Column(name="ListName", type="string", length=64, nullable=false)
+     * @ORM\Column(name="ListName", type="string", unique=true, length=64, nullable=false)
      */
     private $ListName;
 
@@ -132,11 +132,11 @@ class Lists implements GenericInterface
     /**
      * Add Listitem
      *
-     * @param \Application\Entity\ListItems $listitem
-     * @return \Application\Entity\Lists
+     * @param ListItems $listitem
+     * @return Lists
      * @throws \Exception on invalid listitem type
      */
-    public function addListitem(\Application\Entity\ListItems $listitem)
+    public function addListitem(ListItems $listitem)
     {
         if(!($listitem instanceof ListItems) ) {
             throw new \Exception(__METHOD__ . "can only add instances of ListItems");
@@ -152,7 +152,7 @@ class Lists implements GenericInterface
      *
      * @param \Application\Entity\ListItems $listitem
      */
-    public function removeListitem(\Application\Entity\ListItems $listitem)
+    public function removeListitem(ListItems $listitem)
     {
         $this->Listitems->removeElement($listitem);
         $listitem->clearList(); // NOTE: this orphans the item but does not delete it from the db
@@ -174,7 +174,7 @@ class Lists implements GenericInterface
      * @param \Application\Entity\Types $type
      * @return ListsElement
      */
-    public function setType(\Application\Entity\Types $type = null)
+    public function setType(Types $type = null)
     {
         $this->setTypeId($type->getTypeId());
         $this->type = $type;

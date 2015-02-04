@@ -34,7 +34,6 @@ class Printers extends ListItems
 
     public function __construct() {
         parent::__construct();
-        $this->setEntityName(__CLASS__);
     }
 
     /**
@@ -79,12 +78,5 @@ class Printers extends ListItems
     public function getPrinterName()
     {
         return $this->PrinterName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getItemEntity() {
-        return __CLASS__;
     }
 }

@@ -28,7 +28,6 @@ class Strings extends ListItems
 
     public function __construct() {
         parent::__construct();
-        $this->setEntityName(__CLASS__);
     }
 
     /**
@@ -75,9 +74,5 @@ class Strings extends ListItems
     public function getContent()
     {
         return $this->Content;
-    }
-
-    public function getItemEntity() {
-        return __CLASS__;
     }
 }

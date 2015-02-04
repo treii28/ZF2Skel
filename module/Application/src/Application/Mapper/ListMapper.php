@@ -51,7 +51,7 @@ class ListMapper extends AbstractMapper {
             } elseif($subItem instanceof \Application\Entity\Subitems) {
                 $list->addListitem($this->getSubitemRef($subItem->getSubitemId()));
             } else {
-                $list->addListitem($this->getItemRef($subItem->getItemId(), $subItem->getEntityName()));
+                $list->addListitem($this->getItemRef($subItem->getItemId(), get_class($subItem)));
             }
         }
     }
@@ -73,7 +73,7 @@ class ListMapper extends AbstractMapper {
             }
         }
 
-        return $this->getItemRef($subItemRef->getSubitemId(), $subItemRef->getEntityName());
+        return $this->getItemRef($subItemRef->getSubitemId(), get_class($subItemRef));
     }
 
     /**
@@ -120,19 +120,6 @@ class ListMapper extends AbstractMapper {
             throw new \Exception(__METHOD__ . " Lists record not found for '$id'");
         }
         return $list->getType()->getTypeName();
-    }
-
-    /**
-     * @param integer|string $id
-     * @return string
-     * @throws \Exception on list not found
-     */
-    public function getListEntityName($id) {
-        $list = (intval($id > 0)) ? $this->findRecordById($id) : $this->findRecordByName($id);
-        if(!($list instanceof Lists)) {
-            throw new \Exception(__METHOD__ . " Lists record not found for '$id'");
-        }
-        return 'Application\\Entity\\' . $list->getType()->getEntityName();
     }
 
     /**

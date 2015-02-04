@@ -60,7 +60,7 @@ abstract class AbstractMapper extends ServiceAbstract
     }
 
     /**
-     * will try to calculate the entity name or fall back to the defined name
+     * will try to calculate the entity name or fall back to the defined name in the abstract (null string)
      *
      * @return string
      */
@@ -98,6 +98,18 @@ abstract class AbstractMapper extends ServiceAbstract
         return parent::findRecordById($id, $entityName);
     }
 
+    /**
+     * override for findAll that will assume default entity if entityName is empty
+     * @param null|string $entityName
+     * @return array
+     */
+    public function findAll($entityName = null) {
+        if(is_null($entityName)) {
+            $entityName = $this->getEntityName();
+        }
+
+        return parent::findAll($entityName);
+    }
     // </editor-fold>
 
 }

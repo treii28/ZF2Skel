@@ -52,10 +52,12 @@ class Materials extends ListItems
     protected $PopUpMessage;
 
     /**
+     * valid keys (Description) for associated boolean options
+     *
      * @var array $valid_options
      * @static
      */
-    protected static $valid_options = array('Indent Capable Materials','CutOut Capable Materials','Imprint Capable Materials','Etch Capable Materials','CoverImage Capable Materials','Leather Materials','Discontinued Materials');
+    protected static $valid_options = array('Indent','CutOut','Imprint','Etch','CoverImage','Leather','Discontinued');
 
     // </editor-fold desc="Entity properties bound to db columns">
 
@@ -63,7 +65,6 @@ class Materials extends ListItems
 
     public function __construct() {
         parent::__construct();
-        $this->setEntityName(__CLASS__);
     }
 
     // </editor-fold desc="Core class functions">
@@ -71,6 +72,7 @@ class Materials extends ListItems
     // <editor-fold desc="Entity db properties accessors">
 
     /**
+     * Set legacy MaterialId
      * @param integer|null $materialId
      * @return ListItems
      */
@@ -81,6 +83,7 @@ class Materials extends ListItems
     }
 
     /**
+     * get legacy MaterialId
      * @return integer|null
      */
     public function getMaterialId() {
@@ -180,13 +183,5 @@ class Materials extends ListItems
     }
 
     // </editor-fold desc="Entity db properties accessors">
-
-    // <editor-fold desc="Functions to override parent class">
-
-    public function getItemEntity() {
-        return __CLASS__;
-    }
-
-    // </editor-fold desc="Functions to override parent class">
 
 }

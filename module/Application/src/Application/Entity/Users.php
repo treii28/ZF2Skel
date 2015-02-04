@@ -215,10 +215,10 @@ class Users
     /**
      * Add Addresses
      *
-     * @param \Application\Entity\Addresses $addresses
+     * @param Addresses $addresses
      * @return Users
      */
-    public function addAddress(\Application\Entity\Addresses $addresses)
+    public function addAddress(Addresses $addresses)
     {
         $this->Addresses[] = $addresses;
 
@@ -228,9 +228,9 @@ class Users
     /**
      * Remove Addresses
      *
-     * @param \Application\Entity\Addresses $addresses
+     * @param Addresses $addresses
      */
-    public function removeAddress(\Application\Entity\Addresses $addresses)
+    public function removeAddress(Addresses $addresses)
     {
         $this->Addresses->removeElement($addresses);
     }
@@ -248,10 +248,10 @@ class Users
     /**
      * Add Orders
      *
-     * @param \Application\Entity\Orders $orders
+     * @param Orders $orders
      * @return Users
      */
-    public function addOrder(\Application\Entity\Orders $orders)
+    public function addOrder(Orders $orders)
     {
         $this->Orders[] = $orders;
 
@@ -261,9 +261,9 @@ class Users
     /**
      * Remove Orders
      *
-     * @param \Application\Entity\Orders $orders
+     * @param Orders $orders
      */
-    public function removeOrder(\Application\Entity\Orders $orders)
+    public function removeOrder(Orders $orders)
     {
         $this->Orders->removeElement($orders);
     }

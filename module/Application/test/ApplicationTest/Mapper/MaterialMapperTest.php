@@ -26,6 +26,9 @@ class MaterialMapperTest extends TestingAbstract {
         $this->assertInstanceOf('\\Application\\Mapper\\MaterialMapper', $this->getMapper());
         $materials = $this->getMapper()->getMaterialsByOption("Leather Materials");
         $this->assertTrue(is_array($materials));
+        $this->assertEquals(82,count($materials));
+        $firstMaterial = $materials[0];
+        $this->assertEquals($firstMaterial->getOption("Leather Materials")->getContent(), 1);
     }
 
     /**
